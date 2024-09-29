@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum MainRoute {
+enum MainViewPath {
     case onboarding
     case rules
     case settings

@@ -7,6 +7,7 @@
 
 import Foundation
 
-class AppRouter: ObservableObject {
-    @Published var mainAppRoute: [MainRoute] = []
+@Observable
+class AppRouter {
+    var appRoute: [MainViewPath] = []
 }

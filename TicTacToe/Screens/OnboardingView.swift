@@ -9,10 +9,12 @@ import SwiftUI
 
 struct OnboardingView: View {
     
-    @EnvironmentObject private var appRouter: AppRouter
+    @Environment(AppRouter.self) private var appRouter
     
     var body: some View {
-        NavigationStack(path: $appRouter.mainAppRoute) {
+        @Bindable var appRouter = appRouter
+        
+        NavigationStack(path: $appRouter.appRoute) {
             VStack(alignment: .center, spacing: 0) {
                 Spacer()
                 Image("xo")
@@ -37,7 +39,7 @@ struct OnboardingView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         print("Нажали переход на экрна правил")
-                        appRouter.mainAppRoute.append(.rules)
+                        appRouter.appRoute.append(.rules)
                     } label: {
                         Image("questionMark")
                             .resizable()
@@ -49,7 +51,7 @@ struct OnboardingView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         print("Нажали переход на экрна настроек")
-                        appRouter.mainAppRoute.append(.settings)
+                        appRouter.appRoute.append(.settings)
                     } label: {
                         Image("settingIcon")
                             .resizable()
@@ -59,7 +61,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .navigationDestination(for: MainRoute.self) { place in
+            .navigationDestination(for: MainViewPath.self) { place in
                 switch place {
                 case .rules:
                     RulesView()
@@ -77,5 +79,5 @@ struct OnboardingView: View {
     OnboardingView()
         .environment(\.locale, .init(identifier: "EN"))
         .preferredColorScheme(.light)
-        .environmentObject(AppRouter())
+        .environment(AppRouter())
 }
