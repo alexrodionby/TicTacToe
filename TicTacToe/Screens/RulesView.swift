@@ -8,8 +8,41 @@
 import SwiftUI
 
 struct RulesView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        }
+        .navigationBarBackButtonHidden(true) // Скрываем стандартную кнопку "Назад"
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    // Возврат к предыдущему экрану
+                      presentationMode.wrappedValue.dismiss()
+                }) {
+                    // Кастомная кнопка
+                    HStack {
+                        Image(systemName: "house")
+                        Text("Назад")
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    // Возврат к предыдущему экрану
+                      presentationMode.wrappedValue.dismiss()
+                }) {
+                    // Кастомная кнопка
+                    HStack {
+                        Image(systemName: "house")
+                        Text("Назад")
+                    }
+                }
+            }
+        }
     }
 }
 
