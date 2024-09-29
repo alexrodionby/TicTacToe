@@ -82,7 +82,7 @@
 				};
 			};
 			buildConfigurationList = A106D63D2CA88835009D75A5 /* Build configuration list for PBXProject "TicTacToe" */;
-			compatibilityVersion = "Xcode 15.0";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
