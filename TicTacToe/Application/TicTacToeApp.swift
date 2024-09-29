@@ -18,7 +18,7 @@ struct TicTacToeApp: App {
                 OnboardingView()
             }
             .preferredColorScheme(.light)
-            .environmentObject(appRouter)
+            .environment(appRouter)
             .dynamicTypeSize(.large)
         }
     }
