@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct TicTacToeApp: App {
+    
+    @State private var appRouter = AppRouter()
+    
     var body: some Scene {
         WindowGroup {
-            OnboardingView()
+            Group {
+                OnboardingView()
+            }
+            .preferredColorScheme(.light)
+            .environmentObject(appRouter)
+            .dynamicTypeSize(.large)
         }
     }
 }
