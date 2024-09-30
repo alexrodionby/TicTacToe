@@ -4,6 +4,12 @@
     "%lld" : {
 
     },
+    "%lld мин" : {
+
+    },
+    "%lld сек" : {
+
+    },
     "Hello" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -21,8 +27,39 @@
     "How to play" : {
 
     },
+    "Player One Time: %lld sec" : {
+
+    },
+    "Player Two Time: %lld sec" : {
+
+    },
     "TIC-TAC-TOE" : {
 
+    },
+    "Выберите время для игроков:" : {
+
+    },
+    "Игрок - 1 передал ход" : {
+
+    },
+    "Игрок - 2 передал ход" : {
+
+    },
+    "Минуты" : {
+
+    },
+    "Секунды" : {
+
+    },
+    "Ходит игрок: %@, осталось времени: %lld сек" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ходит игрок: %1$@, осталось времени: %2$lld сек"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
