@@ -69,6 +69,7 @@ struct ResultView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
+            .background(.customBackground)
         }
     }
 }
