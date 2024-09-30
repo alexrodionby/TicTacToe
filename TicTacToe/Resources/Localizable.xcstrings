@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "Hello" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -15,13 +18,10 @@
     "Hello, World!" : {
 
     },
-    "Reset" : {
+    "How to play" : {
 
     },
     "TIC-TAC-TOE" : {
-
-    },
-    "Назад" : {
 
     }
   },
