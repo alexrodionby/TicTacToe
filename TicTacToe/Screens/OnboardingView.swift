@@ -69,6 +69,8 @@ struct OnboardingView: View {
                     OnboardingView()
                 case .settings:
                     SettingsView()
+                case .result:
+                    ResultView()
                 }
             }
         }
