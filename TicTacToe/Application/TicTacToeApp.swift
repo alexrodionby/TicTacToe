@@ -11,14 +11,16 @@ import SwiftUI
 struct TicTacToeApp: App {
     
     @State private var appRouter = AppRouter()
+    @State private var gameVM = GameViewModel()
     
     var body: some Scene {
         WindowGroup {
             Group {
-                OnboardingView()
+                GameView()
             }
-            .preferredColorScheme(.light)
             .environment(appRouter)
+            .environment(gameVM)
+            .preferredColorScheme(.light)
             .dynamicTypeSize(.large)
         }
     }
