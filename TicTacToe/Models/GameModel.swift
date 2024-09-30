@@ -7,16 +7,16 @@
 
 import Foundation
 
-enum GameLevel {
-    case hard
-    case standart
-    case easy
-}
-
-struct GameModel {
-    var xoSelect: Int = 1
-    var timer: Bool = false
-    var gameTime: Int = 60
-    var twoPlayers: Bool = false
-    var gameLavel: GameLevel = .standart
-}
+//enum GameLevel {
+//    case hard
+//    case standart
+//    case easy
+//}
+//
+//struct GameModel {
+//    var xoSelect: Int = 1
+//    var timer: Bool = false
+//    var gameTime: Int = 60
+//    var twoPlayers: Bool = false
+//    var gameLavel: GameLevel = .standart
+//}
