@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct BoardCell: View {
+    
+    var cellImage: String = "xSkin4"
+    var cellCornerRadius: CGFloat = 50
+    var imagePadding: CGFloat = 20
+    
+    var tapAction: (() -> Void)?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Image(cellImage)
+            .resizable()
+            .scaledToFit()
+            .padding(imagePadding)
+            .background {
+                RoundedRectangle(cornerRadius: cellCornerRadius, style: .continuous)
+                    .fill(.customLightBlue)
+            }
+            .onTapGesture {
+                tapAction?()
+            }
     }
 }
 
-#Preview {
+#Preview("LightEN") {
     BoardCell()
+        .padding()
+        .environment(\.locale, .init(identifier: "EN"))
+        .preferredColorScheme(.light)
 }
