@@ -27,10 +27,10 @@
     "How to play" : {
 
     },
-    "Player One Time: %lld sec" : {
+    "Player One Time: %@" : {
 
     },
-    "Player Two Time: %lld sec" : {
+    "Player Two Time: %@" : {
 
     },
     "TIC-TAC-TOE" : {
@@ -51,12 +51,12 @@
     "Секунды" : {
 
     },
-    "Ходит игрок: %@, осталось времени: %lld сек" : {
+    "Ходит игрок: %@, осталось времени: %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Ходит игрок: %1$@, осталось времени: %2$lld сек"
+            "value" : "Ходит игрок: %1$@, осталось времени: %2$@"
           }
         }
       }

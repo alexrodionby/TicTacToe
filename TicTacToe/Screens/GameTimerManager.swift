@@ -18,33 +18,26 @@ import Combine
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
 class GameTimerManager: ObservableObject {
+    @Published var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
+    @Published var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
+    @Published var activePlayer: Player = .none // Текущий активный игрок
 
-    /// Оставшееся время для игрока 1 (в секундах)
-    @Published var playerOneTimeRemaining: Int
-    /// Оставшееся время для игрока 2 (в секундах)
-    @Published var playerTwoTimeRemaining: Int
-    /// Текущий активный игрок
-    @Published var activePlayer: Player = .none
-
-    /// Таймер, управляющий обратным отсчетом
+    // Таймер, управляющий обратным отсчетом
     private var timer: AnyCancellable?
 
-    /// Перечисление, представляющее игроков
     enum Player {
         case one
         case two
         case none
     }
 
-    /// Инициализатор, устанавливающий начальное время для каждого игрока
-    /// - Parameter initialTime: Начальное время в секундах
+    // Инициализатор, устанавливающий начальное время для каждого игрока
     init(initialTime: Int) {
         self.playerOneTimeRemaining = initialTime
         self.playerTwoTimeRemaining = initialTime
     }
 
     /// Запускает таймер для указанного игрока
-    /// - Parameter player: Игрок, для которого нужно запустить таймер
     func startTimer(for player: Player) {
         activePlayer = player
         timer?.cancel() // Останавливаем предыдущий таймер, если он есть
@@ -64,7 +57,7 @@ class GameTimerManager: ObservableObject {
     }
 
     /// Обновляет оставшееся время для текущего игрока
-    /// - Parameter player: Игрок, время которого нужно обновить
+    // player: Игрок, время которого нужно обновить
     private func updateTimer(for player: Player) {
         switch player {
         case .one:
@@ -85,7 +78,6 @@ class GameTimerManager: ObservableObject {
     }
 
     /// Сбрасывает таймеры для обоих игроков к начальному значению
-    /// - Parameter initialTime: Начальное время в секундах
     func resetTimers(initialTime: Int) {
         timer?.cancel() // Останавливаем текущий таймер
         playerOneTimeRemaining = initialTime // Сбрасываем время для игрока 1
