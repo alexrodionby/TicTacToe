@@ -4,6 +4,12 @@
     "%lld" : {
 
     },
+    "%lld мин" : {
+
+    },
+    "%lld сек" : {
+
+    },
     "Draw!" : {
 
     },
@@ -13,7 +19,13 @@
     "How to play" : {
 
     },
+    "Player One Time: %@" : {
+
+    },
     "Player One win!" : {
+
+    },
+    "Player Two Time: %@" : {
 
     },
     "Reset" : {

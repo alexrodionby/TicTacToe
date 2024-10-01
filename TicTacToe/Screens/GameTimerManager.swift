@@ -5,14 +5,6 @@
 //  Created by Адам Табиев on 30.09.2024.
 //
 
-
-//
-//  GameTimerManager.swift
-//  TicTacToe
-//
-//  Created by Адам Табиев on 30.09.2024.
-//
-
 import Foundation
 import Combine
 

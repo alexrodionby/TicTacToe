@@ -62,10 +62,10 @@ struct ResultView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 20)
                 
-                BackButton(buttonText: "Back") {
-                    print("Нажали кнопку back")
-                    appRouter.appRoute.append(.onboarding)
-                }
+//                BackButton(buttonText: "Back") {
+//                    print("Нажали кнопку back")
+//                    appRouter.appRoute.append(.onboarding)
+//                }
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
