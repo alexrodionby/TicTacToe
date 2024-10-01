@@ -5,8 +5,14 @@
 //  Created by Адам Табиев on 30.09.2024.
 //
 
+//
+//  GameTimerManager.swift
+//  TicTacToe
+//
+//  Created by Адам Табиев on 30.09.2024.
+//
+
 import Foundation
-import Combine
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
 class GameTimerManager: ObservableObject {
@@ -15,7 +21,7 @@ class GameTimerManager: ObservableObject {
     @Published var activePlayer: Player = .none // Текущий активный игрок
 
     // Таймер, управляющий обратным отсчетом
-    private var timer: AnyCancellable?
+    private var timer: Timer?
 
     enum Player {
         case one
@@ -32,20 +38,18 @@ class GameTimerManager: ObservableObject {
     /// Запускает таймер для указанного игрока
     func startTimer(for player: Player) {
         activePlayer = player
-        timer?.cancel() // Останавливаем предыдущий таймер, если он есть
+        timer?.invalidate() // Останавливаем предыдущий таймер, если он есть
 
-        // Запускаем таймер с интервалом в 1 секунду
-        timer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTimer(for: player) // Обновляем время для текущего игрока каждую секунду
-            }
+        // Запускаем новый таймер, который срабатывает каждую секунду
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateTimer(for: player) // Обновляем время для текущего игрока каждую секунду
+        }
     }
 
     /// Ставит таймер на паузу
     func pauseTimer() {
-        timer?.cancel() // Останавливаем текущий таймер
+        timer?.invalidate() // Останавливаем текущий таймер
     }
 
     /// Обновляет оставшееся время для текущего игрока
@@ -56,13 +60,13 @@ class GameTimerManager: ObservableObject {
             if playerOneTimeRemaining > 0 {
                 playerOneTimeRemaining -= 1 // Уменьшаем оставшееся время игрока 1
             } else {
-                timer?.cancel() // Останавливаем таймер, если время истекло
+                timer?.invalidate() // Останавливаем таймер, если время истекло
             }
         case .two:
             if playerTwoTimeRemaining > 0 {
                 playerTwoTimeRemaining -= 1 // Уменьшаем оставшееся время игрока 2
             } else {
-                timer?.cancel() // Останавливаем таймер, если время истекло
+                timer?.invalidate() // Останавливаем таймер, если время истекло
             }
         case .none:
             break
@@ -71,7 +75,7 @@ class GameTimerManager: ObservableObject {
 
     /// Сбрасывает таймеры для обоих игроков к начальному значению
     func resetTimers(initialTime: Int) {
-        timer?.cancel() // Останавливаем текущий таймер
+        timer?.invalidate() // Останавливаем текущий таймер
         playerOneTimeRemaining = initialTime // Сбрасываем время для игрока 1
         playerTwoTimeRemaining = initialTime // Сбрасываем время для игрока 2
         activePlayer = .none // Сбрасываем активного игрока

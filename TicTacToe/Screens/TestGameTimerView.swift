@@ -80,10 +80,10 @@ struct TestGameTimerView: View {
         }
         .padding()
         // Обновление начального времени при изменении выбранных минут или секунд
-        .onChange(of: selectedMinutes) { _ in
+        .onChange(of: selectedMinutes) {
             updateInitialTime()
         }
-        .onChange(of: selectedSeconds) { _ in
+        .onChange(of: selectedSeconds) {
             updateInitialTime()
         }
     }
