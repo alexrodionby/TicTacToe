@@ -10,6 +10,7 @@ import SwiftUI
 struct GameView: View {
     
     @Environment(GameViewModel.self) private var gameVM
+    @Environment(AppRouter.self) private var appRouter
     @Environment(\.presentationMode) var presentationMode
     
     var columns: [GridItem] = [
@@ -37,15 +38,15 @@ struct GameView: View {
                             
                             if let move = gameVM.moves[i] {
                                 if move.player == gameVM.firstTurnPlayer {
-                                    Image("xSkin5")
+                                    Image(gameVM.xMark)
                                         .resizable()
                                         .aspectRatio(1, contentMode: .fit)
-                                        .padding(20)
+                                        .padding(15)
                                 } else {
-                                    Image("oSkin5")
+                                    Image(gameVM.oMark)
                                         .resizable()
                                         .aspectRatio(1, contentMode: .fit)
-                                        .padding(20)
+                                        .padding(15)
                                 }
                             }
                         }
@@ -55,9 +56,9 @@ struct GameView: View {
                             gameVM.processingPlayerMove(move: Move(player: gameVM.currentPlayer, boarderIndex: i))
                         }
                     }
-                    
                 }
                 .padding(20)
+                .padding(.vertical, 5)
             }
             .background {
                 RoundedRectangle(cornerRadius: gridBackgroundCornerRadius, style: .continuous)
@@ -75,6 +76,19 @@ struct GameView: View {
                 }
             }
             
+        }
+        .onChange(of: gameVM.gameState) { oldValue, newValue in
+            switch newValue {
+            case .finish:
+                print("Игра закончена")
+                appRouter.appRoute.append(.result)
+            case .inProgress:
+                return
+            case .pause:
+                return
+            case .notStarted:
+                return
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {

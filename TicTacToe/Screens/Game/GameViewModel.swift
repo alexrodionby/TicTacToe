@@ -6,18 +6,31 @@
 //
 
 import Foundation
+import Observation
 
+// MARK: - Player
 enum Player {
     case playerOne
     case playerTwo
     case computer
+    case draw
 }
 
+// MARK: - GameStatus
+enum GameStatus {
+    case finish
+    case inProgress
+    case pause
+    case notStarted
+}
+
+// MARK: - Move
 struct Move {
     var player: Player
     var boarderIndex: Int
 }
 
+// MARK: - GameViewModel
 @Observable
 class GameViewModel {
     
@@ -26,6 +39,10 @@ class GameViewModel {
     var firstTurnPlayer: Player = .playerOne
     var secondTurnPlayer: Player = .playerTwo
     var currentPlayer: Player = .playerOne
+    var xMark: String = "xSkin4"
+    var oMark: String = "oSkin4"
+    var whoWin: Player = .draw
+    var gameState: GameStatus = .notStarted
     
     var moves: [Move?] = .init(repeating: nil, count: 9)
     
@@ -44,14 +61,17 @@ class GameViewModel {
         
         if checkWinner(move: move) {
             print("Player \( move.player) win")
+            whoWin = move.player
+            gameState = .finish
             return
         }
         
         if checkForDraw(move: move) {
             print("Ничья")
+            whoWin = .draw
+            gameState = .finish
             return
         }
-        
         
         func checkWinner(move: Move) -> Bool {
             let playerMoves = moves.compactMap{$0}.filter {$0.player == move.player}
@@ -60,8 +80,6 @@ class GameViewModel {
             return false
         }
         
-
-        
         func isCellOccupied(move: Move) -> Bool {
             return moves.contains(where: { $0?.boarderIndex == move.boarderIndex })
         }
@@ -69,12 +87,11 @@ class GameViewModel {
         func checkForDraw(move: Move) -> Bool {
             return moves.compactMap{$0}.count == 9
         }
-        
-
-
     }
     
     func resetGame() {
         moves = Array(repeating: nil, count: 9)
+        whoWin = .draw
+        gameState = .notStarted
     }
 }
