@@ -13,4 +13,6 @@ enum MainViewPath {
     case settings
     case result
     case game
+    case selectgame
+    case selectlevel
 }

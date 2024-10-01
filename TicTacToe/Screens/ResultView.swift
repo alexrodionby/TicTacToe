@@ -69,16 +69,6 @@ struct ResultView: View {
             }
             .background(.customBackground)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        NavigationBackButton()
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-            }
     }
 }
 

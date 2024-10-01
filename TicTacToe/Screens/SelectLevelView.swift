@@ -1,24 +1,22 @@
 //
-//  SelectView.swift
+//  SelectLevelView.swift
 //  TicTacToe
 //
-//  Created by Alexandr Rodionov on 29.09.24.
+//  Created by Emir Byashimov on 02.10.2024.
 //
 
 import SwiftUI
 
-struct SelectView: View {
+struct SelectLevelView: View {
     
     @Environment(AppRouter.self) private var appRouter
     
-    var selectGameTitle: String = "Select Game"
-    var singlePlayerImageName: String = "singlePlayer"
-    var singlePlayerText: String = "Single Player"
-    var twoPlayerImageName: String = "twoPlayers1"
-    var twoPlayerText: String = "Two Players"
-    var leaderboardImageName: String = "twoPlayers2"
-    var leaderboardText: String = "Leaderboard"
     var settingIconName: String = "settingIcon"
+    var selectDifficultyTitle: String = "Select Difficulty"
+    var easyLevelText: String = "Easy"
+    var mediumLevelText: String = "Medium"
+    var hardLevelText: String = "Hard"
+    var randomGodLevelText: String = "Random God"
     
     var body: some View {
         ZStack {
@@ -27,29 +25,35 @@ struct SelectView: View {
             VStack {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(Color.customWhite)
-                    .frame(height: 352)
+                    .frame(height: 400)
                     .overlay(
                         VStack {
-                            Text(selectGameTitle)
+                            Text(selectDifficultyTitle)
                                 .font(.system(size: 24, weight: .bold, design: .default))
                                 .padding(.top, 20)
                             
                             Spacer()
                             
-                            SelectButton(imageName: singlePlayerImageName, buttonText: singlePlayerText) {
-                                appRouter.appRoute.append(.selectlevel)
+                            SelectButton(buttonText: easyLevelText) {
+                                print("easy")
                             }
                             
                             Spacer()
                             
-                            SelectButton(imageName: twoPlayerImageName, buttonText: twoPlayerText) {
-                                print("Two Players button tapped")
+                            SelectButton(buttonText: mediumLevelText) {
+                                print("medium")
                             }
                             
                             Spacer()
                             
-                            SelectButton(imageName: leaderboardImageName, buttonText: leaderboardText) {
-                                print("Leaderboard button tapped")
+                            SelectButton(buttonText: hardLevelText) {
+                                print("hard")
+                            }
+                            
+                            Spacer()
+                            
+                            SelectButton(buttonText: randomGodLevelText) {
+                                appRouter.appRoute.append(.game)
                             }
                             
                             Spacer()
@@ -88,7 +92,7 @@ struct SelectView: View {
 }
 
 #Preview {
-    SelectView()
+    SelectLevelView()
         .environment(AppRouter())
         .environment(\.locale, .init(identifier: "EN"))
         .preferredColorScheme(.light)
