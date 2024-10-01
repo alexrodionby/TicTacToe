@@ -16,7 +16,7 @@ import Foundation
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
 @Observable
-class GameTimerManager: ObservableObject {
+final class GameTimerManager: ObservableObject {
     var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
     var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
     var activePlayer: Player = .none // Текущий активный игрок
