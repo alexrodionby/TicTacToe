@@ -4,22 +4,8 @@
     "%lld" : {
 
     },
-    "%lld мин" : {
+    "Draw!" : {
 
-    },
-    "%lld сек" : {
-
-    },
-    "Hello" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Привет"
-          }
-        }
-      }
     },
     "Hello, World!" : {
 
@@ -27,13 +13,13 @@
     "How to play" : {
 
     },
-    "Player One Time: %@" : {
+    "Player One win!" : {
 
     },
-    "Player Two Time: %@" : {
+    "Reset" : {
 
     },
-    "TIC-TAC-TOE" : {
+    "You lose!" : {
 
     },
     "Выберите время для игроков:" : {

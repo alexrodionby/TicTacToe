@@ -11,4 +11,6 @@ enum MainViewPath {
     case onboarding
     case rules
     case settings
+    case result
+    case game
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct GameView: View {
     
     @Environment(GameViewModel.self) private var gameVM
+    @Environment(\.presentationMode) var presentationMode
     
     var columns: [GridItem] = [
         GridItem(.flexible()),
@@ -60,9 +61,10 @@ struct GameView: View {
             }
             .background {
                 RoundedRectangle(cornerRadius: gridBackgroundCornerRadius, style: .continuous)
-                                        .fill(.customWhite)
+                    .fill(.customWhite)
             }
             .padding(40)
+            
             VStack {
                 Spacer()
                 Button {
@@ -72,7 +74,18 @@ struct GameView: View {
                         .padding()
                 }
             }
-
+            
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    NavigationBackButton()
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
         }
     }
 }
