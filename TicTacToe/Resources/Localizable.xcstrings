@@ -4,16 +4,8 @@
     "%lld" : {
 
     },
-    "Hello" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Привет"
-          }
-        }
-      }
+    "Draw!" : {
+
     },
     "Hello, World!" : {
 
@@ -21,10 +13,13 @@
     "How to play" : {
 
     },
+    "Player One win!" : {
+
+    },
     "Reset" : {
 
     },
-    "TIC-TAC-TOE" : {
+    "You lose!" : {
 
     }
   },

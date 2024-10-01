@@ -12,4 +12,5 @@ enum MainViewPath {
     case rules
     case settings
     case result
+    case game
 }
