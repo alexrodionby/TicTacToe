@@ -11,64 +11,82 @@ struct OnboardingView: View {
     
     @Environment(AppRouter.self) private var appRouter
     
+    var logoImageName: String = "xo"
+    var logoName: String = "TIC-TAC-TOE"
+    var buttonName: String = "Let's play"
+    var rulesImageName: String = "questionMark"
+    var settingsImageName: String = "settingIcon"
+    
     var body: some View {
         @Bindable var appRouter = appRouter
         
         NavigationStack(path: $appRouter.appRoute) {
-            VStack(alignment: .center, spacing: 0) {
-                Spacer()
-                Image("xo")
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.horizontal, 60)
+            ZStack(alignment: .center) {
+                Color.customBackground
+                    .ignoresSafeArea()
                 
-                Text("TIC-TAC-TOE")
-                    .font(.system(size: 32, weight: .bold, design: .default))
-                    .padding(.top, 31)
-                
-                Spacer()
-                
-                MainButton(buttonText: "Let's play") {
-                    print("Нажали кнопку летс плэй")
+                VStack(alignment: .center, spacing: 0) {
+                    Spacer()
+                    
+                    Image(logoImageName)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 60)
+                    
+                    Text(logoName)
+                        .font(.system(size: 32, weight: .bold, design: .default))
+                        .padding(.top, 31)
+                    
+                    Spacer()
+                    
+                    MainButton(buttonText: buttonName) {
+                        // Переход на следующий экран экран
+                        appRouter.appRoute.append(.game)
+                    }
+                    .padding(.horizontal, 21)
+                    .padding(.bottom, 80)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 80)
-                
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        print("Нажали переход на экрна правил")
-                        appRouter.appRoute.append(.rules)
-                    } label: {
-                        Image("questionMark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 36)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            // Переход на экран правил игры
+                            appRouter.appRoute.append(.rules)
+                        } label: {
+                            Image(rulesImageName)
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(height: 36)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            // Переход на экран настроек игры
+                            appRouter.appRoute.append(.settings)
+                        } label: {
+                            Image(settingsImageName)
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(height: 36)
+                                .foregroundStyle(.customBlack)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        print("Нажали переход на экрна настроек")
-                        appRouter.appRoute.append(.settings)
-                    } label: {
-                        Image("settingIcon")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 36)
-                            .foregroundStyle(.customBlack)
+                .navigationDestination(for: MainViewPath.self) { place in
+                    switch place {
+                    case .rules:
+                        RulesView()
+                    case .onboarding:
+                        OnboardingView()
+                    case .settings:
+                        SettingsView()
+                    case .result:
+                        ResultView()
+                    case .game:
+                        GameView()
                     }
-                }
-            }
-            .navigationDestination(for: MainViewPath.self) { place in
-                switch place {
-                case .rules:
-                    RulesView()
-                case .onboarding:
-                    OnboardingView()
-                case .settings:
-                    SettingsView()
                 }
             }
         }

@@ -1,24 +1,25 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Hello" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Привет"
-          }
-        }
-      }
+    "%lld" : {
+
+    },
+    "Draw!" : {
+
     },
     "Hello, World!" : {
 
     },
-    "TIC-TAC-TOE" : {
+    "How to play" : {
 
     },
-    "Назад" : {
+    "Player One win!" : {
+
+    },
+    "Reset" : {
+
+    },
+    "You lose!" : {
 
     }
   },
