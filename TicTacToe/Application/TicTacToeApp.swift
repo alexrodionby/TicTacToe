@@ -16,7 +16,7 @@ struct TicTacToeApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                GameView()
+                OnboardingView()
             }
             .environment(appRouter)
             .environment(gameVM)
