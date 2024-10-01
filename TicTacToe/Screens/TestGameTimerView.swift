@@ -12,7 +12,7 @@
 import SwiftUI
 
 struct TestGameTimerView: View {
-    @StateObject private var timerManager = GameTimerManager(initialTime: 0)
+    private var timerManager = GameTimerManager(initialTime: 0)
     @State private var selectedMinutes: Int = 0
     @State private var selectedSeconds: Int = 0
 

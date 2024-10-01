@@ -15,10 +15,11 @@
 import Foundation
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
+@Observable
 class GameTimerManager: ObservableObject {
-    @Published var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
-    @Published var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
-    @Published var activePlayer: Player = .none // Текущий активный игрок
+    var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
+    var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
+    var activePlayer: Player = .none // Текущий активный игрок
 
     // Таймер, управляющий обратным отсчетом
     private var timer: Timer?
