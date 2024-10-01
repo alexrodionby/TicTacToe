@@ -43,14 +43,12 @@ struct RulesView: View {
                 }
             }
             .navigationTitle("How to play")
-            
             .navigationBarTitleDisplayMode(.inline)
             .padding()
-            .navigationBarBackButtonHidden(true) // Скрываем стандартную кнопку "Назад"
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        // Возврат к предыдущему экрану
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         Image(.backIcon)
