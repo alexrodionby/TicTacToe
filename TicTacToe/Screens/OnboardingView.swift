@@ -74,6 +74,7 @@ struct OnboardingView: View {
                         .buttonStyle(.plain)
                     }
                 }
+                .navigationBarBackButtonHidden(true)
                 .navigationDestination(for: MainViewPath.self) { place in
                     switch place {
                     case .rules:

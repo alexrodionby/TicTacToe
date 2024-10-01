@@ -16,13 +16,11 @@ enum GameResult {
 struct ResultView: View {
     
     @Environment(AppRouter.self) private var appRouter
+    @Environment(\.presentationMode) var presentationMode
     var result: GameResult = .draw
     
     
     var body: some View {
-        @Bindable var appRouter = appRouter
-        
-        NavigationStack(path: $appRouter.appRoute) {
             VStack {
                 
                 Spacer()
@@ -57,20 +55,30 @@ struct ResultView: View {
                 
                 MainButton(buttonText: "Play again") {
                     print("Нажали кнопку play again")
-                    appRouter.appRoute.append(.onboarding)
+                    appRouter.appRoute.removeAll()
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
                 
-//                BackButton(buttonText: "Back") {
-//                    print("Нажали кнопку back")
-//                    appRouter.appRoute.append(.onboarding)
-//                }
+                BackButton(buttonText: "Back") {
+                    print("Нажали кнопку back")
+                    appRouter.appRoute.removeLast()
+                }
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
             .background(.customBackground)
-        }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        NavigationBackButton()
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
     }
 }
 

@@ -26,7 +26,7 @@ struct SelectIcons: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.white)
-                            .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 5)
+                            .shadow(color: .gray.opacity(0.3), radius: 15, x: 0, y: 0)
                             .frame(width: 150,height: 150)
                         
                         VStack {

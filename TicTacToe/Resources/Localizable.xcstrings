@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ turn" : {
+
+    },
     "%lld" : {
 
     },
@@ -44,6 +47,9 @@
 
     },
     "Settings" : {
+
+    },
+    "Timer" : {
 
     },
     "You lose!" : {
