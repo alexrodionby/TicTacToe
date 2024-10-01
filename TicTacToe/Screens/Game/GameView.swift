@@ -171,7 +171,7 @@ struct GameView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    NavigationBackButton()
+                 //   NavigationBackButton()
                 }
                 .buttonStyle(PlainButtonStyle())
             }
