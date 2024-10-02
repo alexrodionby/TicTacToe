@@ -98,6 +98,8 @@ final class GameTimerManager {
         if playerOneTimeRemaining > 0 || playerTwoTimeRemaining > 0 {
             // Определяем наименьшее время, потраченное одним из игроков
             let minimumTimeSpent = min(playerOneTimeSpent, playerTwoTimeSpent)
+            
+            
 
             // Отладка: выводим потраченное время каждым игроком
             print("Player One Time Spent: \(playerOneTimeSpent) сек")
