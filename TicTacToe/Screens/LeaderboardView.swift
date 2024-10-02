@@ -36,7 +36,7 @@ struct LeaderboardView: View {
                         ForEach(Array(bestTimes.enumerated()), id: \.offset) { index, time in
                             HStack(alignment: .top, spacing: 20) {
                                 Circle()
-                                    .fill(Color.customLightBlue)
+                                    .fill(index == 0 ? Color.customPurple : Color.customLightBlue)
                                     .frame(width: 69, height: 69)
                                     .overlay {
                                         Text("\(index + 1)") // Отображаем номер индекса, начиная с 1
@@ -48,7 +48,7 @@ struct LeaderboardView: View {
                                     .padding(.vertical, 24)
                                     .padding(.horizontal, 24)
                                     .font(.system(size: 18, weight: .regular, design: .default))
-                                    .background(Color.customLightBlue)
+                                    .background(index == 0 ? Color.customPurple : Color.customLightBlue)
                                     .cornerRadius(30)
                             }
                         }
