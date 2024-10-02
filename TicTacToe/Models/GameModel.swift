@@ -13,12 +13,10 @@ import Foundation
 //    case easy
 //}
 //
-struct GameModel {
-    var selectMusic: String = "Instrumentals"
-    var selectTimer: String = "30 min"
+// struct GameModel {
 //    var xoSelect: Int = 1
 //    var timer: Bool = false
 //    var gameTime: Int = 60
 //    var twoPlayers: Bool = false
 //    var gameLavel: GameLevel = .standart
-}
+// }

@@ -27,14 +27,14 @@ struct SettingsView: View {
                         .modifier(MainModifier())
                     
                     if isOnTime {
-                        CustomPicker(options:time,selected: GameModel().selectTimer)
+                        CustomPicker(options:time,selected: GameViewModel().selectTimer)
                     }
                     
                     Toggle("Music", isOn: $isOnMusic)
                         .modifier(MainModifier())
                     
                     if isOnMusic {
-                        CustomPicker(title:"Select Music",selected:GameModel().selectMusic)
+                        CustomPicker(title:"Select Music",selected:GameViewModel().selectMusic)
                     }
                 }
             }
