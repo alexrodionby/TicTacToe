@@ -41,7 +41,7 @@ struct OnboardingView: View {
                     
                     MainButton(buttonText: buttonName) {
                         // Переход на следующий экран экран
-                        appRouter.appRoute.append(.game)
+                        appRouter.appRoute.append(.selectgame)
                     }
                     .padding(.horizontal, 21)
                     .padding(.bottom, 80)
@@ -87,6 +87,10 @@ struct OnboardingView: View {
                         ResultView()
                     case .game:
                         GameView()
+                    case .selectgame:
+                        SelectView()
+                    case .selectlevel:
+                        SelectLevelView()
                     }
                 }
             }
