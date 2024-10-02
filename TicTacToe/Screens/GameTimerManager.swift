@@ -5,18 +5,11 @@
 //  Created by Адам Табиев on 30.09.2024.
 //
 
-//
-//  GameTimerManager.swift
-//  TicTacToe
-//
-//  Created by Адам Табиев on 30.09.2024.
-//
-
 import Foundation
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
 @Observable
-final class GameTimerManager: ObservableObject {
+final class GameTimerManager {
     var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
     var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
     var activePlayer: Player = .none // Текущий активный игрок

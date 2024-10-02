@@ -17,74 +17,82 @@ struct TestGameTimerView: View {
     @State private var selectedSeconds: Int = 0
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Отображение оставшегося времени для игроков
-            Text("Player One Time: \(formatTime(timerManager.playerOneTimeRemaining))")
-            Text("Player Two Time: \(formatTime(timerManager.playerTwoTimeRemaining))")
-
-            VStack {
-                Text("Выберите время для игроков:")
-                HStack {
-                    Picker("Минуты", selection: $selectedMinutes) {
-                        ForEach(0..<60) { minute in
-                            Text("\(minute) мин").tag(minute)
+        NavigationStack {
+            VStack(spacing: 20) {
+                
+                NavigationLink("LeaderboardView") {
+                    LeaderboardView()
+                }
+                .font(.largeTitle)
+                
+                // Отображение оставшегося времени для игроков
+                Text("Player One Time: \(formatTime(timerManager.playerOneTimeRemaining))")
+                Text("Player Two Time: \(formatTime(timerManager.playerTwoTimeRemaining))")
+                
+                VStack {
+                    Text("Выберите время для игроков:")
+                    HStack {
+                        Picker("Минуты", selection: $selectedMinutes) {
+                            ForEach(0..<60) { minute in
+                                Text("\(minute) мин").tag(minute)
+                            }
                         }
-                    }
-                    .pickerStyle(WheelPickerStyle())
-                    .frame(width: 100)
-
-                    Picker("Секунды", selection: $selectedSeconds) {
-                        ForEach(0..<60) { second in
-                            Text("\(second) сек").tag(second)
+                        .pickerStyle(WheelPickerStyle())
+                        .frame(width: 100)
+                        
+                        Picker("Секунды", selection: $selectedSeconds) {
+                            ForEach(0..<60) { second in
+                                Text("\(second) сек").tag(second)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
+                        .frame(width: 100)
                     }
-                    .pickerStyle(WheelPickerStyle())
-                    .frame(width: 100)
+                    .padding()
+                }
+                
+                Button("Игрок - 1 передал ход") {
+                    guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
+                        print("Время не выбрано!")
+                        return
+                    }
+                    print("Игрок - 1 передал ход")
+                    timerManager.pauseTimer() // Останавливаем таймер для игрока 1
+                    timerManager.startTimer(for: .two) // Запускаем таймер для игрока 2
                 }
                 .padding()
-            }
-
-            Button("Игрок - 1 передал ход") {
-                guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
-                    print("Время не выбрано!")
-                    return
+                .background(Color.blue.opacity(0.3))
+                .cornerRadius(8)
+                
+                // Кнопка для передачи хода от Игрока 2 к Игроку 1
+                Button("Игрок - 2 передал ход") {
+                    guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
+                        print("Время не выбрано!")
+                        return
+                    }
+                    print("Игрок - 2 передал ход")
+                    timerManager.pauseTimer() // Останавливаем таймер для игрока 2
+                    timerManager.startTimer(for: .one) // Запускаем таймер для игрока 1
                 }
-                print("Игрок - 1 передал ход")
-                timerManager.pauseTimer() // Останавливаем таймер для игрока 1
-                timerManager.startTimer(for: .two) // Запускаем таймер для игрока 2
+                .padding()
+                .background(Color.green.opacity(0.3))
+                .cornerRadius(8)
+                
+                // Отображение оставшегося времени для активного игрока
+                if timerManager.activePlayer != .none {
+                    Text("Ходит: \(timerManager.activePlayer == .one ? "Игрок 1" : "Игрок 2"), осталось времени: \(formatTime(timerManager.activePlayer == .one ? timerManager.playerOneTimeRemaining : timerManager.playerTwoTimeRemaining))")
+                        .font(.headline)
+                        .padding()
+                }
             }
             .padding()
-            .background(Color.blue.opacity(0.3))
-            .cornerRadius(8)
-
-            // Кнопка для передачи хода от Игрока 2 к Игроку 1
-            Button("Игрок - 2 передал ход") {
-                guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
-                    print("Время не выбрано!")
-                    return
-                }
-                print("Игрок - 2 передал ход")
-                timerManager.pauseTimer() // Останавливаем таймер для игрока 2
-                timerManager.startTimer(for: .one) // Запускаем таймер для игрока 1
+            // Обновление начального времени при изменении выбранных минут или секунд
+            .onChange(of: selectedMinutes) {
+                updateInitialTime()
             }
-            .padding()
-            .background(Color.green.opacity(0.3))
-            .cornerRadius(8)
-
-            // Отображение оставшегося времени для активного игрока
-            if timerManager.activePlayer != .none {
-                Text("Ходит: \(timerManager.activePlayer == .one ? "Игрок 1" : "Игрок 2"), осталось времени: \(formatTime(timerManager.activePlayer == .one ? timerManager.playerOneTimeRemaining : timerManager.playerTwoTimeRemaining))")
-                    .font(.headline)
-                    .padding()
+            .onChange(of: selectedSeconds) {
+                updateInitialTime()
             }
-        }
-        .padding()
-        // Обновление начального времени при изменении выбранных минут или секунд
-        .onChange(of: selectedMinutes) {
-            updateInitialTime()
-        }
-        .onChange(of: selectedSeconds) {
-            updateInitialTime()
         }
     }
 

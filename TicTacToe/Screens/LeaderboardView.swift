@@ -8,8 +8,72 @@
 import SwiftUI
 
 struct LeaderboardView: View {
+    @Environment(\.presentationMode) var presentationMode
+    private var leaderboardIsEpty = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            
+            Color.customBackground
+                .ignoresSafeArea()
+            
+            if leaderboardIsEpty {
+                VStack(alignment: .center, spacing: 40) {
+                    
+                    VStack {
+                        Text("No game history")
+                        Text("with turn on time")
+                    }
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    
+                    Image(.leaderboard)
+                }
+            } else {
+                // Здесь будет лидер борд
+                
+                VStack {
+                    Spacer()
+                    
+                    HStack(alignment: .top, spacing: 20) {
+                        Circle()
+                            .fill(Color.customLightBlue)
+                            .frame(width: 69, height: 69)
+                            .overlay {
+                                Text("1")
+                                    .font(.system(size: 20, weight: .regular, design: .default))
+                            }
+                        
+                        Text("Best time 00:20")
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 24)
+                            .padding(.horizontal, 24)
+                            .font(.system(size: 18, weight: .regular, design: .default))
+                            .background(Color.customLightBlue)
+                            .cornerRadius(30)
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 21)
+            }
+        }
+        .navigationTitle("Leaderboard")
+        .font(.system(size: 24, weight: .bold, design: .default)) // !
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(.backIcon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 22)
+                        .foregroundStyle(Color.customBlack)
+                }
+            }
+        }
     }
 }
 

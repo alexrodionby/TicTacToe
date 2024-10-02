@@ -13,6 +13,12 @@
     "%lld сек" : {
 
     },
+    "1" : {
+
+    },
+    "Best time 00:20" : {
+
+    },
     "Choose" : {
 
     },
@@ -28,7 +34,16 @@
     "How to play" : {
 
     },
+    "Leaderboard" : {
+
+    },
+    "LeaderboardView" : {
+
+    },
     "Music" : {
+
+    },
+    "No game history" : {
 
     },
     "Picked" : {
@@ -50,6 +65,9 @@
 
     },
     "Timer" : {
+
+    },
+    "with turn on time" : {
 
     },
     "You lose!" : {
