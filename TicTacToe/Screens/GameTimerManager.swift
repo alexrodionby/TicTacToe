@@ -12,18 +12,13 @@ import Foundation
 final class GameTimerManager {
     var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
     var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
-    private var initialTime: Int // Начальное время для обоих игроков
     var activePlayer: Player = .none // Текущий активный игрок
+
+    private var playerOneTimeSpent: Int = 0 // Потраченное время игроком 1 (в секундах)
+    private var playerTwoTimeSpent: Int = 0 // Потраченное время игроком 2 (в секундах)
 
     // Таймер, управляющий обратным отсчетом
     private var timer: Timer?
-
-    // Хранилище времени, потраченное игроками на игру
-    private(set) var timeStorage: [Int] {
-        didSet {
-            saveTimeStorage() // Сохраняем данные при каждом изменении
-        }
-    }
 
     enum Player {
         case one
@@ -35,8 +30,6 @@ final class GameTimerManager {
     init(initialTime: Int) {
         self.playerOneTimeRemaining = initialTime
         self.playerTwoTimeRemaining = initialTime
-        self.initialTime = initialTime
-        self.timeStorage = Self.loadTimeStorage() // Загружаем сохраненные данные из UserDefaults
     }
 
     /// Запускает таймер для указанного игрока
@@ -47,11 +40,12 @@ final class GameTimerManager {
         // Запускаем новый таймер, который срабатывает каждую секунду
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            self.updateTimer(for: player) // Обновляем время для текущего игрока каждую секунду
+            self.updateTimeSpent(for: player) // Обновляем потраченное время для текущего игрока
+            self.updateTimer(for: player) // Обновляем оставшееся время для текущего игрока
         }
     }
 
-    /// Сбрасывает таймер на паузу
+    /// Ставит таймер на паузу
     func pauseTimer() {
         timer?.invalidate() // Останавливаем текущий таймер
     }
@@ -76,37 +70,59 @@ final class GameTimerManager {
         }
     }
 
-    /// Сбрасывает таймеры для обоих игроков к начальному значению
+    /// Обновляет потраченное время для текущего игрока
+    private func updateTimeSpent(for player: Player) {
+        switch player {
+        case .one:
+            playerOneTimeSpent += 1 // Увеличиваем потраченное время игрока 1 на одну секунду
+        case .two:
+            playerTwoTimeSpent += 1 // Увеличиваем потраченное время игрока 2 на одну секунду
+        case .none:
+            break
+        }
+    }
+
+    /// Сбрасывает таймеры и потраченное время для обоих игроков к начальному значению
     func resetTimers(initialTime: Int) {
         timer?.invalidate() // Останавливаем текущий таймер
         playerOneTimeRemaining = initialTime // Сбрасываем время для игрока 1
         playerTwoTimeRemaining = initialTime // Сбрасываем время для игрока 2
+        playerOneTimeSpent = 0 // Сбрасываем потраченное время игрока 1
+        playerTwoTimeSpent = 0 // Сбрасываем потраченное время игрока 2
         activePlayer = .none // Сбрасываем активного игрока
     }
 
-    /// Находит наименьшее количество секунд, потраченное игроком, и добавляет его в хранилище времени
-    func bestTime() {
-        // Определяем время, потраченное каждым игроком (начальное время минус оставшееся)
-        let timeSpentByPlayerOne = initialTime - playerOneTimeRemaining
-        let timeSpentByPlayerTwo = initialTime - playerTwoTimeRemaining
+    /// Сохраняет наименьшее количество секунд, потраченное игроком, если время не истекло
+    func saveBestTime() {
+        // Проверяем, что время не истекло для обоих игроков
+        if playerOneTimeRemaining > 0 || playerTwoTimeRemaining > 0 {
+            // Определяем наименьшее время, потраченное одним из игроков
+            let minimumTimeSpent = min(playerOneTimeSpent, playerTwoTimeSpent)
 
-        // Определяем наименьшее время из двух игроков
-        let minimumTimeSpent = min(timeSpentByPlayerOne, timeSpentByPlayerTwo)
+            // Отладка: выводим потраченное время каждым игроком
+            print("Player One Time Spent: \(playerOneTimeSpent) сек")
+            print("Player Two Time Spent: \(playerTwoTimeSpent) сек")
+            print("Minimum Time Spent: \(minimumTimeSpent) сек")
 
-        // Добавляем наименьшее время в хранилище времени
-        timeStorage.append(minimumTimeSpent)
-    }
+            // Загружаем текущий массив лучших времен из UserDefaults
+            var bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
 
-    /// Сохраняет `timeStorage` в UserDefaults
-    private func saveTimeStorage() {
-        UserDefaults.standard.set(timeStorage, forKey: "timeStorage")
-    }
+            // Добавляем новое значение
+            bestTimes.append(minimumTimeSpent)
 
-    /// Загружает `timeStorage` из UserDefaults
-    private static func loadTimeStorage() -> [Int] {
-        return UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+            // Сохраняем обновленный массив в UserDefaults
+            UserDefaults.standard.set(bestTimes, forKey: "timeStorage")
+            print("Лучшее время сохранено: \(minimumTimeSpent) сек")
+        } else {
+            print("Время истекло для обоих игроков, ничего не сохраняем")
+        }
     }
 }
+
+
+
+
+
 
 
 

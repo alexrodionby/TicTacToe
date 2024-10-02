@@ -9,28 +9,26 @@ import SwiftUI
 
 struct LeaderboardView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var bestTimes: [Int] = {
-        UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
-    }().sorted() // Сортируем значения по возрастанию
-    
-    private var leaderboardIsEpty: Bool {
+    @State private var bestTimes: [Int] = []
+
+    private var leaderboardIsEmpty: Bool {
         bestTimes.isEmpty
     }
-    
+
     var body: some View {
         VStack {
             ZStack {
                 Color.customBackground
                     .ignoresSafeArea()
-                
-                if leaderboardIsEpty {
+
+                if leaderboardIsEmpty {
                     VStack(alignment: .center, spacing: 40) {
                         VStack {
                             Text("No game history")
                             Text("with turn on time")
                         }
                         .font(.system(size: 20, weight: .medium, design: .default))
-                        
+
                         Image(.leaderboard)
                     }
                 } else {
@@ -44,7 +42,7 @@ struct LeaderboardView: View {
                                         Text("\(index + 1)") // Отображаем номер индекса, начиная с 1
                                             .font(.system(size: 20, weight: .regular, design: .default))
                                     }
-                                
+
                                 Text("Best time: \(time) сек")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.vertical, 24)
@@ -54,7 +52,7 @@ struct LeaderboardView: View {
                                     .cornerRadius(30)
                             }
                         }
-                        
+
                         // Кнопка для очистки `timeStorage`
                         Button(action: {
                             clearTimeStorage()
@@ -72,7 +70,7 @@ struct LeaderboardView: View {
                 }
             }
             .navigationTitle("Leaderboard")
-            .font(.system(size: 24, weight: .bold, design: .default)) // !
+            .font(.system(size: 24, weight: .bold, design: .default))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -88,9 +86,18 @@ struct LeaderboardView: View {
                     }
                 }
             }
+            .onAppear {
+                loadBestTimes()
+            }
         }
     }
-    
+
+    /// Функция для загрузки массива `bestTimes`
+    private func loadBestTimes() {
+        bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+        bestTimes.sort() // Сортируем значения по возрастанию
+    }
+
     /// Функция для очистки массива `timeStorage`
     private func clearTimeStorage() {
         bestTimes.removeAll() // Очищаем локальную переменную
@@ -98,7 +105,4 @@ struct LeaderboardView: View {
     }
 }
 
-#Preview {
-    LeaderboardView()
-}
 

@@ -9,6 +9,13 @@
 // Созданно для демонстрации работы таймера игры.
 // Позже я его удалю.
 
+
+//NavigationLink("LeaderboardView") {
+//    LeaderboardView()
+//}
+//.font(.largeTitle)
+
+
 import SwiftUI
 
 struct TestGameTimerView: View {
@@ -19,16 +26,16 @@ struct TestGameTimerView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                
+
                 NavigationLink("LeaderboardView") {
                     LeaderboardView()
                 }
                 .font(.largeTitle)
-                
+
                 // Отображение оставшегося времени для игроков
                 Text("Player One Time: \(formatTime(timerManager.playerOneTimeRemaining))")
                 Text("Player Two Time: \(formatTime(timerManager.playerTwoTimeRemaining))")
-                
+
                 VStack {
                     Text("Выберите время для игроков:")
                     HStack {
@@ -39,7 +46,7 @@ struct TestGameTimerView: View {
                         }
                         .pickerStyle(WheelPickerStyle())
                         .frame(width: 100)
-                        
+
                         Picker("Секунды", selection: $selectedSeconds) {
                             ForEach(0..<60) { second in
                                 Text("\(second) сек").tag(second)
@@ -50,7 +57,7 @@ struct TestGameTimerView: View {
                     }
                     .padding()
                 }
-                
+
                 Button("Игрок - 1 передал ход") {
                     guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
                         print("Время не выбрано!")
@@ -63,7 +70,7 @@ struct TestGameTimerView: View {
                 .padding()
                 .background(Color.blue.opacity(0.3))
                 .cornerRadius(8)
-                
+
                 // Кнопка для передачи хода от Игрока 2 к Игроку 1
                 Button("Игрок - 2 передал ход") {
                     guard totalSelectedTime() > 0 else { // Проверяем, что время выбрано
@@ -80,18 +87,17 @@ struct TestGameTimerView: View {
 
                 // Кнопка "Игра закончена"
                 Button("Игра закончена") {
-                    timerManager.resetTimers(initialTime: totalSelectedTime()) // Сбрасываем таймеры к начальному значению
-                    timerManager.bestTime() // Сохраняем лучшее время в хранилище
-                    print("Лучшее время сохранено: \(timerManager.timeStorage)")
-                    
-                    // Сброс значений в DatePicker
-                    selectedMinutes = 0
-                    selectedSeconds = 0
+                    timerManager.pauseTimer() // Останавливаем текущий таймер
+                    timerManager.saveBestTime() // Сохраняем лучшее время
+                    print("Лучшее время сохранено")
+
+                    // Сбрасываем таймеры после сохранения
+                    timerManager.resetTimers(initialTime: totalSelectedTime())
                 }
                 .padding()
                 .background(Color.red.opacity(0.3))
                 .cornerRadius(8)
-                
+
                 // Отображение оставшегося времени для активного игрока
                 if timerManager.activePlayer != .none {
                     Text("Ходит: \(timerManager.activePlayer == .one ? "Игрок 1" : "Игрок 2"), осталось времени: \(formatTime(timerManager.activePlayer == .one ? timerManager.playerOneTimeRemaining : timerManager.playerTwoTimeRemaining))")
@@ -101,10 +107,10 @@ struct TestGameTimerView: View {
             }
             .padding()
             // Обновление начального времени при изменении выбранных минут или секунд
-            .onChange(of: selectedMinutes) {
+            .onChange(of: selectedMinutes) { _ in
                 updateInitialTime()
             }
-            .onChange(of: selectedSeconds) {
+            .onChange(of: selectedSeconds) { _ in
                 updateInitialTime()
             }
         }
@@ -132,5 +138,7 @@ struct TestGameTimerView: View {
 #Preview {
     TestGameTimerView()
 }
+
+
 
 
