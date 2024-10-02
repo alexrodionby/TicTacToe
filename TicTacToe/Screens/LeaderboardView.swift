@@ -43,7 +43,7 @@ struct LeaderboardView: View {
                                             .font(.system(size: 20, weight: .regular, design: .default))
                                     }
 
-                                Text("Best time: \(time) сек")
+                                Text("Best time: \(formatTime(time))")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.vertical, 24)
                                     .padding(.horizontal, 24)
@@ -103,7 +103,15 @@ struct LeaderboardView: View {
         bestTimes.removeAll() // Очищаем локальную переменную
         UserDefaults.standard.set(bestTimes, forKey: "timeStorage") // Обновляем UserDefaults
     }
+
+    /// Метод для форматирования времени из секунд в формат "мм:сс"
+    private func formatTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
+
 
 #Preview {
     LeaderboardView()

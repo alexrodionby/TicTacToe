@@ -10,12 +10,6 @@
 // Позже я его удалю.
 
 
-//NavigationLink("LeaderboardView") {
-//    LeaderboardView()
-//}
-//.font(.largeTitle)
-
-
 import SwiftUI
 
 struct TestGameTimerView: View {
