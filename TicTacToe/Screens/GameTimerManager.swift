@@ -12,6 +12,7 @@ import Foundation
 final class GameTimerManager {
     var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
     var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
+    private var initialTime: Int // Начальное время для обоих игроков
     var activePlayer: Player = .none // Текущий активный игрок
 
     // Таймер, управляющий обратным отсчетом
@@ -34,6 +35,7 @@ final class GameTimerManager {
     init(initialTime: Int) {
         self.playerOneTimeRemaining = initialTime
         self.playerTwoTimeRemaining = initialTime
+        self.initialTime = initialTime
         self.timeStorage = Self.loadTimeStorage() // Загружаем сохраненные данные из UserDefaults
     }
 
@@ -49,13 +51,12 @@ final class GameTimerManager {
         }
     }
 
-    /// Ставит таймер на паузу
+    /// Сбрасывает таймер на паузу
     func pauseTimer() {
         timer?.invalidate() // Останавливаем текущий таймер
     }
 
     /// Обновляет оставшееся время для текущего игрока
-    // player: Игрок, время которого нужно обновить
     private func updateTimer(for player: Player) {
         switch player {
         case .one:
@@ -85,9 +86,9 @@ final class GameTimerManager {
 
     /// Находит наименьшее количество секунд, потраченное игроком, и добавляет его в хранилище времени
     func bestTime() {
-        // Находим время, оставшееся у каждого игрока
-        let timeSpentByPlayerOne = playerOneTimeRemaining
-        let timeSpentByPlayerTwo = playerTwoTimeRemaining
+        // Определяем время, потраченное каждым игроком (начальное время минус оставшееся)
+        let timeSpentByPlayerOne = initialTime - playerOneTimeRemaining
+        let timeSpentByPlayerTwo = initialTime - playerTwoTimeRemaining
 
         // Определяем наименьшее время из двух игроков
         let minimumTimeSpent = min(timeSpentByPlayerOne, timeSpentByPlayerTwo)
@@ -106,6 +107,7 @@ final class GameTimerManager {
         return UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
     }
 }
+
 
 
 

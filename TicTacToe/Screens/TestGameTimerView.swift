@@ -80,9 +80,13 @@ struct TestGameTimerView: View {
 
                 // Кнопка "Игра закончена"
                 Button("Игра закончена") {
-                    timerManager.pauseTimer() // Останавливаем оба таймера
+                    timerManager.resetTimers(initialTime: totalSelectedTime()) // Сбрасываем таймеры к начальному значению
                     timerManager.bestTime() // Сохраняем лучшее время в хранилище
                     print("Лучшее время сохранено: \(timerManager.timeStorage)")
+                    
+                    // Сброс значений в DatePicker
+                    selectedMinutes = 0
+                    selectedSeconds = 0
                 }
                 .padding()
                 .background(Color.red.opacity(0.3))
@@ -128,3 +132,5 @@ struct TestGameTimerView: View {
 #Preview {
     TestGameTimerView()
 }
+
+
