@@ -13,6 +13,9 @@
     "%lld сек" : {
 
     },
+    "Best time: %lld сек" : {
+
+    },
     "Choose" : {
 
     },
