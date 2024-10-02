@@ -31,7 +31,7 @@ struct LeaderboardView: View {
             } else {
                 // Здесь будет лидер борд
                 
-                VStack {
+                ScrollView {
                     
                     HStack(alignment: .top, spacing: 20) {
                         Circle()
@@ -52,6 +52,7 @@ struct LeaderboardView: View {
                     }
                 }
                 .padding(.horizontal, 21)
+                .padding(.top, 40)
             }
         }
         .navigationTitle("Leaderboard")
