@@ -32,7 +32,6 @@ struct LeaderboardView: View {
                 // Здесь будет лидер борд
                 
                 VStack {
-                    Spacer()
                     
                     HStack(alignment: .top, spacing: 20) {
                         Circle()
@@ -44,15 +43,13 @@ struct LeaderboardView: View {
                             }
                         
                         Text("Best time 00:20")
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, 24)
                             .padding(.horizontal, 24)
                             .font(.system(size: 18, weight: .regular, design: .default))
                             .background(Color.customLightBlue)
                             .cornerRadius(30)
                     }
-                    
-                    Spacer()
                 }
                 .padding(.horizontal, 21)
             }
