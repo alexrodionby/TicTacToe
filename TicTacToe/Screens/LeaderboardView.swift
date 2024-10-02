@@ -9,19 +9,22 @@ import SwiftUI
 
 struct LeaderboardView: View {
     @Environment(\.presentationMode) var presentationMode
-    private var leaderboardIsEpty = false
+    private var leaderboardIsEpty: Bool {
+        bestTimes.isEmpty
+    }
     
-    private var bestTimes = [1, 2, 3, 4].sorted()
+    // Загружаем значения из UserDefaults
+    private var bestTimes: [Int] = {
+        UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+    }().sorted() // Сортируем значения по возрастанию
     
     var body: some View {
         ZStack {
-            
             Color.customBackground
                 .ignoresSafeArea()
             
             if leaderboardIsEpty {
                 VStack(alignment: .center, spacing: 40) {
-                    
                     VStack {
                         Text("No game history")
                         Text("with turn on time")
@@ -31,7 +34,7 @@ struct LeaderboardView: View {
                     Image(.leaderboard)
                 }
             } else {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     ForEach(Array(bestTimes.enumerated()), id: \.offset) { index, time in
                         HStack(alignment: .top, spacing: 20) {
                             Circle()
@@ -42,7 +45,7 @@ struct LeaderboardView: View {
                                         .font(.system(size: 20, weight: .regular, design: .default))
                                 }
                             
-                            Text("Best time: \(time)")
+                            Text("Best time: \(time) сек")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.vertical, 24)
                                 .padding(.horizontal, 24)
