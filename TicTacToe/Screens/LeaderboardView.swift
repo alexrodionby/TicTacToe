@@ -11,6 +11,8 @@ struct LeaderboardView: View {
     @Environment(\.presentationMode) var presentationMode
     private var leaderboardIsEpty = false
     
+    private var bestTimes = [1, 2, 3, 4].sorted()
+    
     var body: some View {
         ZStack {
             
@@ -29,26 +31,25 @@ struct LeaderboardView: View {
                     Image(.leaderboard)
                 }
             } else {
-                // Здесь будет лидер борд
-                
                 ScrollView {
-                    
-                    HStack(alignment: .top, spacing: 20) {
-                        Circle()
-                            .fill(Color.customLightBlue)
-                            .frame(width: 69, height: 69)
-                            .overlay {
-                                Text("1")
-                                    .font(.system(size: 20, weight: .regular, design: .default))
-                            }
-                        
-                        Text("Best time 00:20")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 24)
-                            .padding(.horizontal, 24)
-                            .font(.system(size: 18, weight: .regular, design: .default))
-                            .background(Color.customLightBlue)
-                            .cornerRadius(30)
+                    ForEach(Array(bestTimes.enumerated()), id: \.offset) { index, time in
+                        HStack(alignment: .top, spacing: 20) {
+                            Circle()
+                                .fill(Color.customLightBlue)
+                                .frame(width: 69, height: 69)
+                                .overlay {
+                                    Text("\(index + 1)") // Отображаем номер индекса, начиная с 1
+                                        .font(.system(size: 20, weight: .regular, design: .default))
+                                }
+                            
+                            Text("Best time: \(time)")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.vertical, 24)
+                                .padding(.horizontal, 24)
+                                .font(.system(size: 18, weight: .regular, design: .default))
+                                .background(Color.customLightBlue)
+                                .cornerRadius(30)
+                        }
                     }
                 }
                 .padding(.horizontal, 21)

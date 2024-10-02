@@ -77,6 +77,16 @@ struct TestGameTimerView: View {
                 .padding()
                 .background(Color.green.opacity(0.3))
                 .cornerRadius(8)
+
+                // Кнопка "Игра закончена"
+                Button("Игра закончена") {
+                    timerManager.pauseTimer() // Останавливаем оба таймера
+                    timerManager.bestTime() // Сохраняем лучшее время в хранилище
+                    print("Лучшее время сохранено: \(timerManager.timeStorage)")
+                }
+                .padding()
+                .background(Color.red.opacity(0.3))
+                .cornerRadius(8)
                 
                 // Отображение оставшегося времени для активного игрока
                 if timerManager.activePlayer != .none {

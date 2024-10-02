@@ -17,6 +17,13 @@ final class GameTimerManager {
     // Таймер, управляющий обратным отсчетом
     private var timer: Timer?
 
+    // Хранилище времени, потраченное игроками на игру
+    private(set) var timeStorage: [Int] {
+        didSet {
+            saveTimeStorage() // Сохраняем данные при каждом изменении
+        }
+    }
+
     enum Player {
         case one
         case two
@@ -27,6 +34,7 @@ final class GameTimerManager {
     init(initialTime: Int) {
         self.playerOneTimeRemaining = initialTime
         self.playerTwoTimeRemaining = initialTime
+        self.timeStorage = Self.loadTimeStorage() // Загружаем сохраненные данные из UserDefaults
     }
 
     /// Запускает таймер для указанного игрока
@@ -74,6 +82,30 @@ final class GameTimerManager {
         playerTwoTimeRemaining = initialTime // Сбрасываем время для игрока 2
         activePlayer = .none // Сбрасываем активного игрока
     }
+
+    /// Находит наименьшее количество секунд, потраченное игроком, и добавляет его в хранилище времени
+    func bestTime() {
+        // Находим время, оставшееся у каждого игрока
+        let timeSpentByPlayerOne = playerOneTimeRemaining
+        let timeSpentByPlayerTwo = playerTwoTimeRemaining
+
+        // Определяем наименьшее время из двух игроков
+        let minimumTimeSpent = min(timeSpentByPlayerOne, timeSpentByPlayerTwo)
+
+        // Добавляем наименьшее время в хранилище времени
+        timeStorage.append(minimumTimeSpent)
+    }
+
+    /// Сохраняет `timeStorage` в UserDefaults
+    private func saveTimeStorage() {
+        UserDefaults.standard.set(timeStorage, forKey: "timeStorage")
+    }
+
+    /// Загружает `timeStorage` из UserDefaults
+    private static func loadTimeStorage() -> [Int] {
+        return UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+    }
 }
+
 
 

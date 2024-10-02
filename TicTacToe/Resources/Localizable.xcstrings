@@ -13,12 +13,6 @@
     "%lld сек" : {
 
     },
-    "1" : {
-
-    },
-    "Best time 00:20" : {
-
-    },
     "Choose" : {
 
     },
@@ -35,6 +29,9 @@
 
     },
     "Leaderboard" : {
+
+    },
+    "LeaderboardView" : {
 
     },
     "Music" : {
