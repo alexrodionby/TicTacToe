@@ -92,40 +92,34 @@ final class GameTimerManager {
         activePlayer = .none // Сбрасываем активного игрока
     }
 
-    /// Сохраняет наименьшее количество секунд, потраченное игроком, если время не истекло
+    /// Сохраняет наименьшее количество секунд, потраченное игроком, если время не истекло и оно больше нуля
     func saveBestTime() {
         // Проверяем, что время не истекло для обоих игроков
         if playerOneTimeRemaining > 0 || playerTwoTimeRemaining > 0 {
             // Определяем наименьшее время, потраченное одним из игроков
             let minimumTimeSpent = min(playerOneTimeSpent, playerTwoTimeSpent)
             
-            
-
-            // Отладка: выводим потраченное время каждым игроком
-            print("Player One Time Spent: \(playerOneTimeSpent) сек")
-            print("Player Two Time Spent: \(playerTwoTimeSpent) сек")
-            print("Minimum Time Spent: \(minimumTimeSpent) сек")
-
-            // Загружаем текущий массив лучших времен из UserDefaults
-            var bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
-
-            // Добавляем новое значение
-            bestTimes.append(minimumTimeSpent)
-
-            // Сохраняем обновленный массив в UserDefaults
-            UserDefaults.standard.set(bestTimes, forKey: "timeStorage")
-            print("Лучшее время сохранено: \(minimumTimeSpent) сек")
+            // Проверяем, что минимальное время больше нуля
+            if minimumTimeSpent > 0 {
+                // Загружаем текущий массив лучших времен из UserDefaults
+                var bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+                
+                // Проверяем, есть ли уже такое время в массиве
+                if !bestTimes.contains(minimumTimeSpent) {
+                    // Добавляем новое значение
+                    bestTimes.append(minimumTimeSpent)
+                    
+                    // Сохраняем обновленный массив в UserDefaults
+                    UserDefaults.standard.set(bestTimes, forKey: "timeStorage")
+                    print("Лучшее время сохранено: \(minimumTimeSpent) сек")
+                } else {
+                    print("Время \(minimumTimeSpent) сек уже сохранено, дубликат не добавлен")
+                }
+            } else {
+                print("Минимальное время равно нулю, сохранение не выполнено")
+            }
         } else {
             print("Время истекло для обоих игроков, ничего не сохраняем")
         }
     }
 }
-
-
-
-
-
-
-
-
-
