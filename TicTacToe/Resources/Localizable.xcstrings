@@ -13,7 +13,7 @@
     "%lld сек" : {
 
     },
-    "Best time: %lld сек" : {
+    "Best time: %@" : {
 
     },
     "Choose" : {
@@ -23,9 +23,6 @@
 
     },
     "Game Time" : {
-
-    },
-    "How to play" : {
 
     },
     "Leaderboard" : {

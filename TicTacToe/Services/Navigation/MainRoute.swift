@@ -7,12 +7,13 @@
 
 import Foundation
 
+/// Перечисление всех возможных экранов в приложении
 enum MainViewPath {
-    case onboarding
-    case rules
-    case settings
-    case result
-    case game
-    case selectgame
-    case selectlevel
+    case onboarding      /// Экран приветствия
+    case rules           /// Экран правил
+    case settings        /// Экран настроек
+    case result          /// Экран с результатами
+    case game            /// Экран игры
+    case selectgame      /// Экран выбора игры
+    case selectlevel     /// Экран выбора уровня сложности
 }
