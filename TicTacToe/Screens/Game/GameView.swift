@@ -160,7 +160,7 @@ struct GameView: View {
             if oldValue == Player.playerOne && newValue == Player.computer {
                 Task {
                     if gameVM.moves.contains(where: {$0 == nil}) {
-                        await gameVM.computerRandomMove()
+                        await gameVM.computerSmartMove()
                     }
                 }
             }
