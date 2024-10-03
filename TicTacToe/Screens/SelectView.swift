@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SelectView: View {
     
+    @Environment(GameViewModel.self) private var gameVM
     @Environment(AppRouter.self) private var appRouter
+    @Environment(\.presentationMode) var presentationMode
     
     var selectGameTitle: String = "Select Game"
     var singlePlayerImageName: String = "singlePlayer"
@@ -19,50 +21,61 @@ struct SelectView: View {
     var leaderboardImageName: String = "twoPlayers2"
     var leaderboardText: String = "Leaderboard"
     var settingIconName: String = "settingIcon"
+    var backgroundRectangleCornerRadius: CGFloat = 30
+    var rectangleHeight: CGFloat = 340
+    var rectanglePadding: CGFloat = 52
     
     var body: some View {
         ZStack {
             Color.customBackground
+                .ignoresSafeArea()
             
             VStack {
-                RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.customWhite)
-                    .frame(height: 352)
+                RoundedRectangle(cornerRadius: backgroundRectangleCornerRadius, style: .continuous)
+                    .fill(.customWhite)
+                    .frame(height: rectangleHeight)
                     .overlay(
                         VStack {
                             Text(selectGameTitle)
                                 .font(.system(size: 24, weight: .bold, design: .default))
+                                .foregroundStyle(.customBlack)
                                 .padding(.top, 20)
                             
                             Spacer()
                             
-                            SelectButton(imageName: singlePlayerImageName, buttonText: singlePlayerText) {
-                                appRouter.appRoute.append(.selectlevel)
+                            MainButton(buttonText: singlePlayerText,   buttonColor: .customBlack,  buttonBackColor: .customLightBlue,    showIconImage: true, iconImageName: singlePlayerImageName) {
+                                
                             }
+                            .padding(.bottom, 20)
                             
-                            Spacer()
-                            
-                            SelectButton(imageName: twoPlayerImageName, buttonText: twoPlayerText) {
-                                print("Two Players button tapped")
+                            MainButton(buttonText: twoPlayerText,   buttonColor: .customBlack,  buttonBackColor: .customLightBlue,    showIconImage: true, iconImageName: twoPlayerImageName) {
+                                
                             }
+                            .padding(.bottom, 20)
                             
-                            Spacer()
-                            
-                            SelectButton(imageName: leaderboardImageName, buttonText: leaderboardText) {
-                                print("Leaderboard button tapped")
+                            MainButton(buttonText: leaderboardText,   buttonColor: .customBlack,  buttonBackColor: .customLightBlue,    showIconImage: true, iconImageName: leaderboardImageName) {
+                                
                             }
-                            
-                            Spacer()
-                            
+                            .padding(.bottom, 20)
                         }
+                            .padding(.horizontal, 20)
                     )
-                    .padding(.horizontal, 40)
             }
+            .padding(.horizontal, rectanglePadding)
         }
-        .ignoresSafeArea()
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    NavigationBackButton()
+                }
+                .buttonStyle(.plain)
+            }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    /// Переход на экран настроек игры
                     appRouter.appRoute.append(.settings)
                 } label: {
                     Image(settingIconName)
@@ -73,15 +86,6 @@ struct SelectView: View {
                 }
                 .buttonStyle(.plain)
             }
-                
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    appRouter.appRoute.removeLast()
-                } label: {
-                    NavigationBackButton()
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -89,7 +93,8 @@ struct SelectView: View {
 
 #Preview {
     SelectView()
-        .environment(AppRouter())
         .environment(\.locale, .init(identifier: "EN"))
         .preferredColorScheme(.light)
+        .environment(GameViewModel())
+        .environment(AppRouter())
 }
