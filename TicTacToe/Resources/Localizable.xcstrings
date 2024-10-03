@@ -19,13 +19,7 @@
     "Choose" : {
 
     },
-    "Draw!" : {
-
-    },
     "Game Time" : {
-
-    },
-    "How to play" : {
 
     },
     "Leaderboard" : {
@@ -46,9 +40,6 @@
     "Player One Time: %@" : {
 
     },
-    "Player One win!" : {
-
-    },
     "Player Two Time: %@" : {
 
     },
@@ -62,9 +53,6 @@
 
     },
     "with turn on time" : {
-
-    },
-    "You lose!" : {
 
     },
     "Выберите время для игроков:" : {
