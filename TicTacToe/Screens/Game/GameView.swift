@@ -171,18 +171,20 @@ struct GameView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                 //   NavigationBackButton()
+                    NavigationBackButton()
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
             }
         }
     }
 }
 
 #Preview("LightEN") {
-    GameView()
-        .environment(\.locale, .init(identifier: "EN"))
-        .preferredColorScheme(.light)
-        .environment(GameViewModel())
-        .environment(AppRouter())
+    NavigationStack {
+        GameView()
+            .environment(\.locale, .init(identifier: "EN"))
+            .preferredColorScheme(.light)
+            .environment(GameViewModel())
+            .environment(AppRouter())
+    }
 }
