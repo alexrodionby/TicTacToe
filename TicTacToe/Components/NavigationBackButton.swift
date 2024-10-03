@@ -7,16 +7,18 @@
 
 import SwiftUI
 
+/// Кнопка для возвращения назад в навигации, используемая в приложении
 struct NavigationBackButton: View {
     
+    /// Название изображения для кнопки "Назад"
     let imageName: String = "backIcon"
     
     var body: some View {
         Image(imageName)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 30)
-            .foregroundStyle(.customBlack)
+            .resizable()                    /// Делаем изображение изменяемого размера
+            .scaledToFit()                  /// Масштабируем изображение, сохраняя его пропорции
+            .frame(width: 30)               /// Устанавливаем ширину изображения в 30 пикселей
+            .foregroundStyle(.customBlack)  /// Устанавливаем цвет изображения
     }
 }
 

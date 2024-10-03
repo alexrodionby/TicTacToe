@@ -24,6 +24,14 @@ enum GameStatus {
     case notStarted
 }
 
+// MARK: - GameStatus
+enum GameLevel {
+    case easy
+    case medium
+    case hard
+    case randomGod
+}
+
 // MARK: - Move
 struct Move {
     var player: Player
@@ -39,6 +47,7 @@ class GameViewModel {
     var firstTurnPlayer: Player = .playerOne
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
+    var gameLevel: GameLevel = .randomGod
     var selectMusic: String = "Instrumentals"
     var selectTimer: String = "30 min"
     var xMark: String = "xSkin4"
