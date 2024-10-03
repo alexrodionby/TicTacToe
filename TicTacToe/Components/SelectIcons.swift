@@ -26,7 +26,7 @@ struct SelectIcons: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.white)
-                            .shadow(color: .gray.opacity(0.3), radius: 15, x: 0, y: 0)
+                            .shadow(color: .gray.opacity(0.3), radius: 15, x: 4, y: 4)
                             .frame(width: 150,height: 150)
                         
                         VStack {
@@ -44,6 +44,7 @@ struct SelectIcons: View {
                             
                             Button(action: {
                                 selectedIconSet = index
+                                
                             }) {
                                 Text(selectedIconSet == index ? "Picked" : "Choose")
                                     .padding(.vertical,10)

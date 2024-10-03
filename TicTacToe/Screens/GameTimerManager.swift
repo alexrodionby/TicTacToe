@@ -5,21 +5,17 @@
 //  Created by Адам Табиев on 30.09.2024.
 //
 
-//
-//  GameTimerManager.swift
-//  TicTacToe
-//
-//  Created by Адам Табиев on 30.09.2024.
-//
-
 import Foundation
 
 /// Менеджер таймера для игры, отвечающий за контроль времени игроков и отслеживание текущего активного игрока.
 @Observable
-final class GameTimerManager: ObservableObject {
+final class GameTimerManager {
     var playerOneTimeRemaining: Int // Оставшееся время для игрока 1 (в секундах)
     var playerTwoTimeRemaining: Int // Оставшееся время для игрока 2 (в секундах)
     var activePlayer: Player = .none // Текущий активный игрок
+
+    private var playerOneTimeSpent: Int = 0 // Потраченное время игроком 1 (в секундах)
+    private var playerTwoTimeSpent: Int = 0 // Потраченное время игроком 2 (в секундах)
 
     // Таймер, управляющий обратным отсчетом
     private var timer: Timer?
@@ -44,7 +40,8 @@ final class GameTimerManager: ObservableObject {
         // Запускаем новый таймер, который срабатывает каждую секунду
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            self.updateTimer(for: player) // Обновляем время для текущего игрока каждую секунду
+            self.updateTimeSpent(for: player) // Обновляем потраченное время для текущего игрока
+            self.updateTimer(for: player) // Обновляем оставшееся время для текущего игрока
         }
     }
 
@@ -54,7 +51,6 @@ final class GameTimerManager: ObservableObject {
     }
 
     /// Обновляет оставшееся время для текущего игрока
-    // player: Игрок, время которого нужно обновить
     private func updateTimer(for player: Player) {
         switch player {
         case .one:
@@ -74,13 +70,62 @@ final class GameTimerManager: ObservableObject {
         }
     }
 
-    /// Сбрасывает таймеры для обоих игроков к начальному значению
+    /// Обновляет потраченное время для текущего игрока
+    private func updateTimeSpent(for player: Player) {
+        switch player {
+        case .one:
+            playerOneTimeSpent += 1 // Увеличиваем потраченное время игрока 1 на одну секунду
+        case .two:
+            playerTwoTimeSpent += 1 // Увеличиваем потраченное время игрока 2 на одну секунду
+        case .none:
+            break
+        }
+    }
+
+    /// Сбрасывает таймеры и потраченное время для обоих игроков к начальному значению
     func resetTimers(initialTime: Int) {
         timer?.invalidate() // Останавливаем текущий таймер
         playerOneTimeRemaining = initialTime // Сбрасываем время для игрока 1
         playerTwoTimeRemaining = initialTime // Сбрасываем время для игрока 2
+        playerOneTimeSpent = 0 // Сбрасываем потраченное время игрока 1
+        playerTwoTimeSpent = 0 // Сбрасываем потраченное время игрока 2
         activePlayer = .none // Сбрасываем активного игрока
     }
+
+    /// Сохраняет наименьшее количество секунд, потраченное игроком, если время не истекло
+    func saveBestTime() {
+        // Проверяем, что время не истекло для обоих игроков
+        if playerOneTimeRemaining > 0 || playerTwoTimeRemaining > 0 {
+            // Определяем наименьшее время, потраченное одним из игроков
+            let minimumTimeSpent = min(playerOneTimeSpent, playerTwoTimeSpent)
+            
+            
+
+            // Отладка: выводим потраченное время каждым игроком
+            print("Player One Time Spent: \(playerOneTimeSpent) сек")
+            print("Player Two Time Spent: \(playerTwoTimeSpent) сек")
+            print("Minimum Time Spent: \(minimumTimeSpent) сек")
+
+            // Загружаем текущий массив лучших времен из UserDefaults
+            var bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+
+            // Добавляем новое значение
+            bestTimes.append(minimumTimeSpent)
+
+            // Сохраняем обновленный массив в UserDefaults
+            UserDefaults.standard.set(bestTimes, forKey: "timeStorage")
+            print("Лучшее время сохранено: \(minimumTimeSpent) сек")
+        } else {
+            print("Время истекло для обоих игроков, ничего не сохраняем")
+        }
+    }
 }
+
+
+
+
+
+
+
 
 

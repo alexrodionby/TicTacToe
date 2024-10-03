@@ -39,6 +39,8 @@ class GameViewModel {
     var firstTurnPlayer: Player = .playerOne
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
+    var selectMusic: String = "Instrumentals"
+    var selectTimer: String = "30 min"
     var xMark: String = "xSkin4"
     var oMark: String = "oSkin4"
     var whoWin: Player = .draw

@@ -11,29 +11,31 @@ struct SettingsView: View {
     @State var selectedIconSet: Int = 0
     @State var isOnTime: Bool = false
     @State var isOnMusic: Bool = false
-    @State var selectedTime: String = ""
-    @State var selectedMusic: String = "Classical"
     
     let musicOptions = ["Classical", "Instrumentals", "Nature"]
-    let time = ["30 min", "60 min", "120 min"]
+    let time = ["30 min", "60 min", "120 min","30 min", "60 min", "120 min"]
     
     var body: some View {
         ScrollView {
             Text("Settings")
                 .font(.system(size: 24, weight: .bold, design: .default))
                 .padding()
+            
             VStack {
-                VStack(spacing: 20) {
+                VStack(spacing: 25) {
                     Toggle("Game Time", isOn: $isOnTime)
                         .modifier(MainModifier())
-                        .padding()
                     
-                    CustomPicker(options:time, isOn:$isOnTime)
+                    if isOnTime {
+                        CustomPicker(options:time,selected: GameViewModel().selectTimer)
+                    }
                     
                     Toggle("Music", isOn: $isOnMusic)
                         .modifier(MainModifier())
                     
-                    CustomPicker(title:"Select Music",isOn: $isOnMusic)
+                    if isOnMusic {
+                        CustomPicker(title:"Select Music",selected:GameViewModel().selectMusic)
+                    }
                 }
             }
             .padding()

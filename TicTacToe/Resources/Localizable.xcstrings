@@ -13,31 +13,31 @@
     "%lld сек" : {
 
     },
-    "Choose" : {
+    "Best time: %@" : {
 
     },
-    "Draw!" : {
+    "Choose" : {
 
     },
     "Game Time" : {
 
     },
-    "Hello, World!" : {
+    "Leaderboard" : {
 
     },
-    "How to play" : {
+    "LeaderboardView" : {
 
     },
     "Music" : {
+
+    },
+    "No game history" : {
 
     },
     "Picked" : {
 
     },
     "Player One Time: %@" : {
-
-    },
-    "Player One win!" : {
 
     },
     "Player Two Time: %@" : {
@@ -52,10 +52,13 @@
     "Timer" : {
 
     },
-    "You lose!" : {
+    "with turn on time" : {
 
     },
     "Выберите время для игроков:" : {
+
+    },
+    "Игра закончена" : {
 
     },
     "Игрок - 1 передал ход" : {
@@ -65,6 +68,9 @@
 
     },
     "Минуты" : {
+
+    },
+    "Очистить историю" : {
 
     },
     "Секунды" : {

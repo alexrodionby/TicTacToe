@@ -9,8 +9,10 @@ import SwiftUI
 
 struct OnboardingView: View {
     
+    /// Получаем роутер из окружения для управления навигацией
     @Environment(AppRouter.self) private var appRouter
     
+    /// Названия изображений и текстов, которые можно изменить для кастомизации
     var logoImageName: String = "xo"
     var logoName: String = "TIC-TAC-TOE"
     var buttonName: String = "Let's play"
@@ -18,8 +20,10 @@ struct OnboardingView: View {
     var settingsImageName: String = "settingIcon"
     
     var body: some View {
+        /// Привязываем объект роутера из окружения с помощью @Bindable для синхронизации данных
         @Bindable var appRouter = appRouter
         
+        /// Используем NavigationStack для управления навигацией по экранам
         NavigationStack(path: $appRouter.appRoute) {
             ZStack(alignment: .center) {
                 Color.customBackground
@@ -40,7 +44,7 @@ struct OnboardingView: View {
                     Spacer()
                     
                     MainButton(buttonText: buttonName) {
-                        // Переход на следующий экран экран
+                        /// Переход на экран выбора игры
                         appRouter.appRoute.append(.selectgame)
                     }
                     .padding(.horizontal, 21)
@@ -49,7 +53,7 @@ struct OnboardingView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
-                            // Переход на экран правил игры
+                            /// Переход на экран правил игры
                             appRouter.appRoute.append(.rules)
                         } label: {
                             Image(rulesImageName)
@@ -62,7 +66,7 @@ struct OnboardingView: View {
                     
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            // Переход на экран настроек игры
+                            /// Переход на экран настроек игры
                             appRouter.appRoute.append(.settings)
                         } label: {
                             Image(settingsImageName)
@@ -74,23 +78,25 @@ struct OnboardingView: View {
                         .buttonStyle(.plain)
                     }
                 }
-                .navigationBarBackButtonHidden(true)
+                .navigationBarBackButtonHidden(true) /// Отключаем кнопку возврата по умолчанию
+                
+                /// Настройка маршрутов навигации по экранам
                 .navigationDestination(for: MainViewPath.self) { place in
                     switch place {
                     case .rules:
-                        RulesView()
+                        RulesView() /// Экран правил
                     case .onboarding:
-                        OnboardingView()
+                        OnboardingView() /// Экран приветствия
                     case .settings:
-                        SettingsView()
+                        SettingsView() /// Экран настроек
                     case .result:
-                        ResultView()
+                        ResultView() /// Экран результатов
                     case .game:
-                        GameView()
+                        GameView() /// Экран игры
                     case .selectgame:
-                        SelectView()
+                        SelectView() /// Экран выбора игры
                     case .selectlevel:
-                        SelectLevelView()
+                        SelectLevelView() /// Экран выбора уровня
                     }
                 }
             }
