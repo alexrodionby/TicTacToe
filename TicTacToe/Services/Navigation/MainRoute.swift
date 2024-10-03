@@ -16,4 +16,5 @@ enum MainViewPath {
     case game            /// Экран игры
     case selectgame      /// Экран выбора игры
     case selectlevel     /// Экран выбора уровня сложности
+    case leaderboard     /// Экран сохраненных результатов
 }
