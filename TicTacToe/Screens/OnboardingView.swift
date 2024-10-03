@@ -97,6 +97,8 @@ struct OnboardingView: View {
                         SelectView() /// Экран выбора игры
                     case .selectlevel:
                         SelectLevelView() /// Экран выбора уровня
+                    case .leaderboard:
+                        LeaderboardView() /// Экран сохраненных результатов
                     }
                 }
             }
