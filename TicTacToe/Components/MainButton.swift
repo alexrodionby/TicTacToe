@@ -16,6 +16,9 @@ struct MainButton: View {
     var buttonCornerRadius: CGFloat = 30
     var buttonBackColor: Color = .customBlue
     var buttonHeight: CGFloat = 70
+    var borderIsOn: Bool = false
+    var borderWidth: CGFloat = 2
+    var buttonBorderColor: Color = .customBlue
     
     var action: (() -> Void)?
     
@@ -30,17 +33,31 @@ struct MainButton: View {
                 .lineLimit(1)
                 .padding()
                 .background {
-                    RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous)
-                        .fill(buttonBackColor)
-                        .frame(height: buttonHeight)
+                    if borderIsOn {
+                        RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous)
+                            .stroke(buttonBorderColor, lineWidth: borderWidth)
+                            .frame(height: buttonHeight - borderWidth)
+                    } else {
+                        RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous)
+                            .fill(buttonBackColor)
+                            .frame(height: buttonHeight)
+                    }
                 }
         }
+        .buttonStyle(.plain)
     }
 }
 
 #Preview("LightEN") {
-    MainButton()
-        .padding()
-        .environment(\.locale, .init(identifier: "EN"))
-        .preferredColorScheme(.light)
+    VStack(spacing: 0) {
+        MainButton()
+            .padding()
+            .environment(\.locale, .init(identifier: "EN"))
+            .preferredColorScheme(.light)
+        
+        MainButton(buttonText: "Button", buttonColor: .customBlue, buttonBackColor: .customBackground, borderIsOn: true, buttonBorderColor: .customBlue)
+            .padding()
+            .environment(\.locale, .init(identifier: "EN"))
+            .preferredColorScheme(.light)
+    }
 }
