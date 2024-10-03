@@ -103,4 +103,5 @@ struct OnboardingView: View {
         .environment(\.locale, .init(identifier: "EN"))
         .preferredColorScheme(.light)
         .environment(AppRouter())
+        .environment(GameViewModel())
 }
