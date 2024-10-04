@@ -8,6 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    /// Получаем доступ к модели игры через окружение
+    @Environment(GameViewModel.self) private var gameVM
+    /// Получаем доступ к роутеру приложения через окружение
+    @Environment(AppRouter.self) private var appRouter
+    /// Переменная для управления закрытием экрана
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var selectedIconSet: Int = 0
     @State var isOnTime: Bool = false
     @State var isOnMusic: Bool = false
@@ -45,10 +53,27 @@ struct SettingsView: View {
            
             SelectIcons()
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    NavigationBackButton()
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
         .background(.customBackground)
     }
 }
 
 #Preview {
-    SettingsView()
+    NavigationStack {
+        SettingsView()
+            .environment(\.locale, .init(identifier: "EN"))
+            .preferredColorScheme(.light)
+            .environment(GameViewModel())
+            .environment(AppRouter())
+    }
 }
