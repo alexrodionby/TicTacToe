@@ -24,7 +24,7 @@ enum GameStatus {
     case notStarted
 }
 
-// MARK: - GameStatus
+// MARK: - GameLevel
 enum GameLevel {
     case easy
     case medium
@@ -42,8 +42,10 @@ struct Move {
 @Observable
 class GameViewModel {
     
+    /// Паттерны победы. Каждый набор представляет индексы ячеек, которые составляют выигрышную комбинацию.
     private let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
     
+    /// Переменные, отвечающие за текущих игроков и статус игры
     var firstTurnPlayer: Player = .playerOne
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
@@ -52,39 +54,47 @@ class GameViewModel {
     var selectTimer: String = "30 min"
     var xMark: String = "xSkin4"
     var oMark: String = "oSkin4"
-    var whoWin: Player = .draw
-    var gameState: GameStatus = .notStarted
-    var boardIsDisable: Bool = false
+    var whoWin: Player = .draw              /// Определяет победителя
+    var gameState: GameStatus = .notStarted /// Текущий статус игры
+    var boardIsDisable: Bool = false        /// Блокирует доску
+    var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     
-    var moves: [Move?] = .init(repeating: nil, count: 9)
-    
-    // MARK: - External Methods
+    // MARK: - External Methods (Публичные методы для взаимодействия с View)
     func processingPlayerMove(move: Move) {
+        
+        /// Обрабатывает ход игрока, проверяет на занятость ячейки, обновляет текущего игрока и проверяет победу/ничью.
         if isCellOccupied(move: move) {
             return
         } else {
+            /// Если ячейка свободна, записываем ход игрока
             moves[move.boarderIndex] = move
-            
-            // Проверка на победу или ничью после хода игрока
-            if checkWinner(move: move) {
-                print("Player \(move.player) win")
-                whoWin = move.player
-                gameState = .finish
-                boardIsDisable = true
-                return
-            }
-            
-            if checkForDraw(move: move) {
-                print("Ничья")
-                whoWin = .draw
-                gameState = .finish
-                boardIsDisable = true
-                return
-            }
-
-            // Переключение на следующего игрока
-            currentPlayer = (currentPlayer == firstTurnPlayer) ? secondTurnPlayer : firstTurnPlayer
         }
+        
+        /// Проверка на победу после каждого хода
+        if checkWinner(move: move) {
+            whoWin = move.player
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        /// Проверка на ничью
+        if checkForDraw(move: move) {
+            whoWin = .draw
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        
+        /// Переключение между игроками
+        if gameState != .finish && moves.count < 9 {
+            if currentPlayer == firstTurnPlayer {
+                currentPlayer = secondTurnPlayer
+            } else {
+                currentPlayer = firstTurnPlayer
+            }
+        }
+        
+      
     }
 
     
@@ -111,19 +121,25 @@ class GameViewModel {
     }
     
     
-    // MARK: - Internal Methods
+    // MARK: - Internal Methods (Внутренние методы для внутренней логики)
     
+    /// Проверяет, не заполнены ли все ячейки на поле, чтобы определить ничью
     private func checkForDraw(move: Move) -> Bool {
-        return moves.compactMap{$0}.count == 9
+        return moves.compactMap{$0}.count == 9  /// Возвращает true, если все ячейки заполнены
     }
     
+    /// Проверяет, есть ли победитель на основе последнего хода
     private func checkWinner(move: Move) -> Bool {
+        /// Фильтруем ходы, сделанные текущим игроком
         let playerMoves = moves.compactMap{$0}.filter {$0.player == move.player}
+        /// Получаем индексы этих ходов
         let playerPositions = Set(playerMoves.map{$0.boarderIndex})
+        /// Проверяем, есть ли у игрока одна из выигрышных комбинаций
         for pattern in winPatterns where pattern.isSubset(of: playerPositions) { return true }
         return false
     }
     
+    /// Проверяет, занята ли ячейка, чтобы не допустить перезапись
     private func isCellOccupied(move: Move) -> Bool {
         return moves.contains(where: { $0?.boarderIndex == move.boarderIndex })
     }
