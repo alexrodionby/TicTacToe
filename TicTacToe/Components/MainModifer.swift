@@ -22,7 +22,3 @@ struct MainModifier: ViewModifier {
             )
     }
 }
-
-#Preview {
-    SettingsView()
-}

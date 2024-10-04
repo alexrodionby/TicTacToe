@@ -123,6 +123,12 @@ struct GameView: View {
                     }
                     .padding(20)
                     .padding(.vertical, 5)
+                    
+                    // Добавляем линию, если есть выигрышный паттерн
+                    if let pattern = gameVM.winningPattern {
+                        WinningLineView(winningPattern: pattern)
+                    }
+                    
                 }
                 .disabled(gameVM.boardIsDisable)
                 .background {
@@ -146,8 +152,10 @@ struct GameView: View {
         .onChange(of: gameVM.gameState) { oldValue, newValue in
             switch newValue {
             case .finish:
-                print("Игра закончена")
-                appRouter.appRoute.append(.result)
+                Task {
+                    try? await Task.sleep(for: .seconds(1))
+                    appRouter.appRoute.append(.result)
+                }
             case .inProgress:
                 return
             case .pause:
@@ -159,8 +167,20 @@ struct GameView: View {
         .onChange(of: gameVM.currentPlayer) { oldValue, newValue in
             if oldValue == Player.playerOne && newValue == Player.computer {
                 Task {
+                    print("gameVM.gameLevel =", gameVM.gameLevel)
+                    print("gameVM.currentPlayer =", gameVM.currentPlayer)
                     if gameVM.moves.contains(where: {$0 == nil}) {
-                        await gameVM.computerRandomMove()
+                        switch gameVM.gameLevel {
+                        case .easy:
+                            await gameVM.computerEasyMove()
+                        case .medium:
+                            await gameVM.computerMediumMove()
+                        case .hard:
+                            await gameVM.computerHardMove()
+                        case .randomGod:
+                            await gameVM.computerRandomMove()
+                        }
+                        
                     }
                 }
             }

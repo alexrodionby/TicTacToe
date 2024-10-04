@@ -73,6 +73,7 @@ struct SelectLevelView: View {
                                 /// Выбираем уровень сложности и переходим на экран игры
                                 gameVM.resetGame()
                                 gameVM.gameLevel = .randomGod
+                                gameVM.gameState = .inProgress
                                 appRouter.appRoute.append(.game)
                             }
                             .padding(.bottom, 20)
@@ -82,6 +83,7 @@ struct SelectLevelView: View {
             }
             .padding(.horizontal, rectanglePadding)
         }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -106,7 +108,6 @@ struct SelectLevelView: View {
                 .buttonStyle(.plain)
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 

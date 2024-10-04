@@ -9,7 +9,7 @@ import Foundation
 import Observation
 
 // MARK: - Player
-enum Player {
+enum Player {       /// Список воззможных игроков
     case playerOne
     case playerTwo
     case computer
@@ -17,7 +17,7 @@ enum Player {
 }
 
 // MARK: - GameStatus
-enum GameStatus {
+enum GameStatus {       /// Статус игрового процесса
     case finish
     case inProgress
     case pause
@@ -25,7 +25,7 @@ enum GameStatus {
 }
 
 // MARK: - GameLevel
-enum GameLevel {
+enum GameLevel {        /// Уровень сложности игры
     case easy
     case medium
     case hard
@@ -33,7 +33,7 @@ enum GameLevel {
 }
 
 // MARK: - Move
-struct Move {
+struct Move {       /// Структура, которая описывает ход любого игрока
     var player: Player
     var boarderIndex: Int
 }
@@ -58,11 +58,14 @@ class GameViewModel {
     var gameState: GameStatus = .notStarted /// Текущий статус игры
     var boardIsDisable: Bool = false        /// Блокирует доску
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
+    var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
     
     // MARK: - External Methods (Публичные методы для взаимодействия с View)
+    
+    /// Обрабатывает ход игрока, проверяет на занятость ячейки, обновляет текущего игрока и проверяет победу/ничью.
     func processingPlayerMove(move: Move) {
         
-        /// Обрабатывает ход игрока, проверяет на занятость ячейки, обновляет текущего игрока и проверяет победу/ничью.
+        /// Проверяет на занятость ячейки
         if isCellOccupied(move: move) {
             return
         } else {
@@ -77,6 +80,7 @@ class GameViewModel {
             boardIsDisable = true
             return
         }
+        
         /// Проверка на ничью
         if checkForDraw(move: move) {
             whoWin = .draw
@@ -86,27 +90,20 @@ class GameViewModel {
         }
         
         /// Переключение между игроками
-        if gameState != .finish && moves.count < 9 {
-            if currentPlayer == firstTurnPlayer {
-                currentPlayer = secondTurnPlayer
-            } else {
-                currentPlayer = firstTurnPlayer
-            }
-        }
-        
-      
+        changePlayer()
     }
-
     
+    /// Сбрасываем все значения текущей игры на дефолтные
     func resetGame() {
         moves = Array(repeating: nil, count: 9)
         whoWin = .draw
-        gameState = .inProgress
+        gameState = .notStarted
         currentPlayer = firstTurnPlayer
         boardIsDisable = false
+        winningPattern = nil  /// Сбрасываем выигрышный паттерн
     }
-
     
+    /// Возвращает имя игрока
     func getPlayerName(player: Player) -> String {
         switch player {
         case .playerOne:
@@ -119,7 +116,6 @@ class GameViewModel {
             return "Draw"
         }
     }
-    
     
     // MARK: - Internal Methods (Внутренние методы для внутренней логики)
     
@@ -135,7 +131,10 @@ class GameViewModel {
         /// Получаем индексы этих ходов
         let playerPositions = Set(playerMoves.map{$0.boarderIndex})
         /// Проверяем, есть ли у игрока одна из выигрышных комбинаций
-        for pattern in winPatterns where pattern.isSubset(of: playerPositions) { return true }
+        for pattern in winPatterns where pattern.isSubset(of: playerPositions) {
+            winningPattern = pattern /// Сохраняем выигрышный паттерн
+            return true
+        }
         return false
     }
     
@@ -144,49 +143,89 @@ class GameViewModel {
         return moves.contains(where: { $0?.boarderIndex == move.boarderIndex })
     }
     
-    // MARK: - AI Methods
+    /// Переключение между игроками
+    private func changePlayer() {
+        if gameState != .finish && moves.filter({ $0 == nil }).count != 0 {
+            if currentPlayer == firstTurnPlayer {
+                currentPlayer = secondTurnPlayer
+            } else {
+                currentPlayer = firstTurnPlayer
+            }
+            
+            if currentPlayer == .computer {
+                boardIsDisable = true
+            } else {
+                boardIsDisable = false
+            }
+        }
+    }
     
+    // MARK: - AI Methods (Методы для искусственного интеллекта)
+    
+    /// Определяет случайную незанятую позицию на игровом поле для хода компьютера.
+    /// - Parameter moves: Массив ходов (состояние игрового поля).
+    /// - Returns: Возвращает индекс первой свободной ячейки или случайную незанятую ячейку.
     private func computerMovePosition(moves: [Move?]) -> Int {
+        // Собираем все занятые ячейки (индексы) на поле.
         let occupiedIndices = Set(moves.compactMap { $0?.boarderIndex })
+        
+        // Создаем множество всех индексов (от 0 до 8).
         let allIndices = Set(0..<9)
+        
+        // Вычисляем незанятые индексы путем вычитания занятых индексов из всех индексов.
         let unoccupiedIndices = allIndices.subtracting(occupiedIndices)
+        
+        // Выбираем случайную незанятую ячейку.
         let randomIndex = unoccupiedIndices.randomElement()
+        
+        // Возвращаем выбранный индекс, если он есть, или 0, если нет доступных ячеек.
         return randomIndex ?? 0
     }
     
+    /// Выполняет случайный ход за компьютер с задержкой, затем проверяет, завершилась ли игра (победа или ничья).
+    /// Если игра продолжается, передает ход игроку.
+    /// - Note: Функция асинхронная, добавлена задержка в 1 секунду для симуляции времени на обдумывание хода компьютером.
     func computerRandomMove() async {
+        // Имитируем задержку хода компьютера на 1 секунду.
         try? await Task.sleep(for: .seconds(1))
+        
+        // Выбираем случайную незанятую позицию для хода компьютера.
         let computerPosition = computerMovePosition(moves: moves)
+        
+        // Создаем объект хода компьютера с выбранной позицией.
         let computerMove = Move(player: .computer, boarderIndex: computerPosition)
+        
+        // Записываем ход компьютера на доску.
         moves[computerPosition] = computerMove
         
+        // Проверяем, выиграл ли компьютер после этого хода.
         if checkWinner(move: computerMove) {
-            print("Computer win")
-            whoWin = computerMove.player
-            gameState = .finish
-            boardIsDisable = true
+            whoWin = computerMove.player // Устанавливаем компьютера победителем.
+            gameState = .finish // Обновляем статус игры как завершённую.
+            boardIsDisable = true // Блокируем доску.
             return
         }
         
+        // Проверяем, не наступила ли ничья после хода компьютера.
         if checkForDraw(move: computerMove) {
-            print("Ничья")
-            whoWin = .draw
-            gameState = .finish
-            boardIsDisable = true
+            whoWin = .draw // Устанавливаем результат игры как ничья.
+            gameState = .finish // Обновляем статус игры как завершённую.
+            boardIsDisable = true // Блокируем доску.
             return
         }
         
-        currentPlayer = .playerOne
-        boardIsDisable = false
+        // Переключение между игроками
+        changePlayer()
     }
-//     MARK: - AI Methods
-
+    
+    // MARK: - AI Methods (Реализация алгоритма minimax)
+    
     private func minimax(board: [Move?], depth: Int, isMaximizing: Bool) -> Int {
         // Проверяем, выиграл ли кто-либо или ничья
         if let score = evaluate(board: board) {
             return score - depth // Глубина учитывается для выбора быстрейшей победы или долгой ничьей
         }
-
+        
         // Если это ход компьютера (максимизирующий игрок)
         if isMaximizing {
             var bestScore = Int.min
@@ -213,7 +252,7 @@ class GameViewModel {
             return bestScore
         }
     }
-
+    
     // Оценка текущего состояния доски
     private func evaluate(board: [Move?]) -> Int? {
         // Проверяем, выиграл ли кто-либо
@@ -234,15 +273,16 @@ class GameViewModel {
         if board.compactMap({ $0 }).count == 9 {
             return 0
         }
-
+        
         // Игра продолжается
         return nil
     }
-
+    
+    // Используется для нахождения лучшего хода для компьютера
     private func bestMoveForComputer() -> Int {
         var bestScore = Int.min
         var moveIndex = 0
-
+        
         for i in 0..<moves.count {
             if moves[i] == nil {
                 // Сделаем временный ход за компьютер
@@ -262,7 +302,7 @@ class GameViewModel {
         
         return moveIndex
     }
-
+    
     func computerHardMove() async {
         try? await Task.sleep(for: .seconds(1))
         
@@ -272,7 +312,6 @@ class GameViewModel {
         moves[bestPosition] = computerMove
         
         if checkWinner(move: computerMove) {
-            print("Computer win")
             whoWin = computerMove.player
             gameState = .finish
             boardIsDisable = true
@@ -280,15 +319,13 @@ class GameViewModel {
         }
         
         if checkForDraw(move: computerMove) {
-            print("Ничья")
             whoWin = .draw
             gameState = .finish
             boardIsDisable = true
             return
         }
         
-        currentPlayer = .playerOne
-        boardIsDisable = false
+        changePlayer()
     }
     
     func computerMediumMove() async {
@@ -325,11 +362,10 @@ class GameViewModel {
         moves[randomPosition] = computerMove
         completeTurn(for: computerMove)
     }
-
+    
     // Завершение хода компьютера с проверкой на победу или ничью
     private func completeTurn(for move: Move) {
         if checkWinner(move: move) {
-            print("Computer win")
             whoWin = move.player
             gameState = .finish
             boardIsDisable = true
@@ -337,17 +373,15 @@ class GameViewModel {
         }
         
         if checkForDraw(move: move) {
-            print("Ничья")
             whoWin = .draw
             gameState = .finish
             boardIsDisable = true
             return
         }
         
-        currentPlayer = .playerOne
-        boardIsDisable = false
+        changePlayer()
     }
-
+    
     // Метод для поиска выигрышного хода
     private func findWinningMove(for player: Player) -> Int? {
         for i in 0..<moves.count where moves[i] == nil {
@@ -368,11 +402,9 @@ class GameViewModel {
         }
         return nil // Если не найдено выигрышного хода, возвращаем nil
     }
-
     
     func computerEasyMove() async {
         try? await Task.sleep(for: .seconds(1))
-        
         
         // Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
         if let winPosition = findWinningMove(for: .computer) {
