@@ -76,6 +76,7 @@ struct SelectView: View {
             }
             .padding(.horizontal, rectanglePadding)
         }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -100,11 +101,10 @@ struct SelectView: View {
                 .buttonStyle(.plain)
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
-#Preview {
+#Preview("LightEN") {
     NavigationStack {
         SelectView()
             .environment(\.locale, .init(identifier: "EN"))

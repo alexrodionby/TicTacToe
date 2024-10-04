@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SelectIcons: View {
     @State private var selectedIconSet: Int? = 0
-    @State private var gameModel = GameViewModel ()
+    @State private var gameModel = GameViewModel()
     
     let iconSets = [
         ["xSkin4", "oSkin4"],
@@ -28,7 +28,7 @@ struct SelectIcons: View {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.white)
                             .shadow(color: .gray.opacity(0.3), radius: 15, x: 4, y: 4)
-                            .frame(width: 150,height: 150)
+                            .frame(width: 150, height: 150)
                         
                         VStack {
                             Spacer()
@@ -45,12 +45,12 @@ struct SelectIcons: View {
                             
                             Button(action: {
                                 selectedIconSet = index
-                                gameModel.xMark = iconSets [index] [0]
-                                gameModel.oMark = iconSets [index] [1]
+                                gameModel.xMark = iconSets[index][0]
+                                gameModel.oMark = iconSets[index][1]
                             }) {
                                 Text(selectedIconSet == index ? "Picked" : "Choose")
-                                    .padding(.vertical,10)
-                                    .padding(.horizontal,30)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal, 30)
                                     .foregroundColor(selectedIconSet == index ? .customWhite : .customBlack)
                                     .font(.system(size: 16, weight: .bold, design: .default))
                                 

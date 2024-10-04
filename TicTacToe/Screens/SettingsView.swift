@@ -35,14 +35,15 @@ struct SettingsView: View {
                         .modifier(MainModifier())
                     
                     if isOnTime {
-                        CustomPicker(options:time,selected: GameViewModel().selectTimer)
+                        CustomPicker(options: time, selected: GameViewModel().selectTimer)
                     }
                     
                     Toggle("Music", isOn: $isOnMusic)
                         .modifier(MainModifier())
                     
+                    
                     if isOnMusic {
-                        CustomPicker(title:"Select Music",selected:GameViewModel().selectMusic)
+                        CustomPicker(title: "Select Music", selected: GameViewModel().selectMusic)
                     }
                 }
             }
@@ -68,7 +69,7 @@ struct SettingsView: View {
     }
 }
 
-#Preview {
+#Preview("LightEN") {
     NavigationStack {
         SettingsView()
             .environment(\.locale, .init(identifier: "EN"))

@@ -102,4 +102,8 @@ struct CustomPicker: View {
 
 #Preview {
     SettingsView()
+        .environment(\.locale, .init(identifier: "EN"))
+        .preferredColorScheme(.light)
+        .environment(GameViewModel())
+        .environment(AppRouter())
 }
