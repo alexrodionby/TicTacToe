@@ -96,14 +96,16 @@ class GameViewModel {
         
       
     }
+
     
     func resetGame() {
         moves = Array(repeating: nil, count: 9)
         whoWin = .draw
-        gameState = .notStarted
+        gameState = .inProgress
         currentPlayer = firstTurnPlayer
         boardIsDisable = false
     }
+
     
     func getPlayerName(player: Player) -> String {
         switch player {
@@ -176,5 +178,223 @@ class GameViewModel {
         
         currentPlayer = .playerOne
         boardIsDisable = false
+    }
+//     MARK: - AI Methods
+
+    private func minimax(board: [Move?], depth: Int, isMaximizing: Bool) -> Int {
+        // Проверяем, выиграл ли кто-либо или ничья
+        if let score = evaluate(board: board) {
+            return score - depth // Глубина учитывается для выбора быстрейшей победы или долгой ничьей
+        }
+
+        // Если это ход компьютера (максимизирующий игрок)
+        if isMaximizing {
+            var bestScore = Int.min
+            for i in 0..<board.count {
+                if board[i] == nil { // Проверяем, доступна ли клетка
+                    var newBoard = board
+                    newBoard[i] = Move(player: .computer, boarderIndex: i)
+                    let score = minimax(board: newBoard, depth: depth + 1, isMaximizing: false)
+                    bestScore = max(score, bestScore)
+                }
+            }
+            return bestScore
+        } else {
+            // Ход игрока (минимизирующий игрок)
+            var bestScore = Int.max
+            for i in 0..<board.count {
+                if board[i] == nil {
+                    var newBoard = board
+                    newBoard[i] = Move(player: firstTurnPlayer, boarderIndex: i)
+                    let score = minimax(board: newBoard, depth: depth + 1, isMaximizing: true)
+                    bestScore = min(score, bestScore)
+                }
+            }
+            return bestScore
+        }
+    }
+
+    // Оценка текущего состояния доски
+    private func evaluate(board: [Move?]) -> Int? {
+        // Проверяем, выиграл ли кто-либо
+        for pattern in winPatterns {
+            let movesComputer = Set(board.compactMap { $0?.player == .computer ? $0?.boarderIndex : nil })
+            let movesPlayer = Set(board.compactMap { $0?.player == firstTurnPlayer ? $0?.boarderIndex : nil })
+            
+            if pattern.isSubset(of: movesComputer) {
+                return 10 // Победа компьютера
+            }
+            
+            if pattern.isSubset(of: movesPlayer) {
+                return -10 // Победа игрока
+            }
+        }
+        
+        // Ничья
+        if board.compactMap({ $0 }).count == 9 {
+            return 0
+        }
+
+        // Игра продолжается
+        return nil
+    }
+
+    private func bestMoveForComputer() -> Int {
+        var bestScore = Int.min
+        var moveIndex = 0
+
+        for i in 0..<moves.count {
+            if moves[i] == nil {
+                // Сделаем временный ход за компьютер
+                var newBoard = moves
+                newBoard[i] = Move(player: .computer, boarderIndex: i)
+                
+                // Вычисляем оценку с помощью минимакса
+                let score = minimax(board: newBoard, depth: 0, isMaximizing: false)
+                
+                // Выбираем лучший ход
+                if score > bestScore {
+                    bestScore = score
+                    moveIndex = i
+                }
+            }
+        }
+        
+        return moveIndex
+    }
+
+    func computerHardMove() async {
+        try? await Task.sleep(for: .seconds(1))
+        
+        // Ход компьютера с минимаксом
+        let bestPosition = bestMoveForComputer()
+        let computerMove = Move(player: .computer, boarderIndex: bestPosition)
+        moves[bestPosition] = computerMove
+        
+        if checkWinner(move: computerMove) {
+            print("Computer win")
+            whoWin = computerMove.player
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        
+        if checkForDraw(move: computerMove) {
+            print("Ничья")
+            whoWin = .draw
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        
+        currentPlayer = .playerOne
+        boardIsDisable = false
+    }
+    
+    func computerMediumMove() async {
+        try? await Task.sleep(for: .seconds(1))
+        
+        // 1. Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
+        if let winPosition = findWinningMove(for: .computer) {
+            let computerMove = Move(player: .computer, boarderIndex: winPosition)
+            moves[winPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
+        // 2. Проверка на необходимость блокировки победного хода игрока
+        if let blockPosition = findWinningMove(for: firstTurnPlayer) {
+            let computerMove = Move(player: .computer, boarderIndex: blockPosition)
+            moves[blockPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
+        // 3. Выбор центральной или угловой клетки, если они свободны
+        let preferredPositions = [4, 0, 2, 6, 8]
+        if let preferredPosition = preferredPositions.first(where: { moves[$0] == nil }) {
+            let computerMove = Move(player: .computer, boarderIndex: preferredPosition)
+            moves[preferredPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
+        // 4. Если ничего из вышеперечисленного не сработало, делаем случайный ход
+        let randomPosition = computerMovePosition(moves: moves)
+        let computerMove = Move(player: .computer, boarderIndex: randomPosition)
+        moves[randomPosition] = computerMove
+        completeTurn(for: computerMove)
+    }
+
+    // Завершение хода компьютера с проверкой на победу или ничью
+    private func completeTurn(for move: Move) {
+        if checkWinner(move: move) {
+            print("Computer win")
+            whoWin = move.player
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        
+        if checkForDraw(move: move) {
+            print("Ничья")
+            whoWin = .draw
+            gameState = .finish
+            boardIsDisable = true
+            return
+        }
+        
+        currentPlayer = .playerOne
+        boardIsDisable = false
+    }
+
+    // Метод для поиска выигрышного хода
+    private func findWinningMove(for player: Player) -> Int? {
+        for i in 0..<moves.count where moves[i] == nil {
+            // Копируем текущее состояние доски
+            var newBoard = moves
+            // Делаем временный ход на текущей пустой клетке
+            newBoard[i] = Move(player: player, boarderIndex: i)
+            
+            // Проверяем, если есть победная комбинация с этим ходом
+            let playerMoves = newBoard.compactMap { $0 }.filter { $0.player == player }
+            let playerPositions = Set(playerMoves.map { $0.boarderIndex })
+            
+            for pattern in winPatterns {
+                if pattern.isSubset(of: playerPositions) {
+                    return i // Возвращаем индекс, который приведет к победе
+                }
+            }
+        }
+        return nil // Если не найдено выигрышного хода, возвращаем nil
+    }
+
+    
+    func computerEasyMove() async {
+        try? await Task.sleep(for: .seconds(1))
+        
+        
+        // Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
+        if let winPosition = findWinningMove(for: .computer) {
+            let computerMove = Move(player: .computer, boarderIndex: winPosition)
+            moves[winPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
+        // Выбор центральной или угловой клетки, если они свободны
+        let preferredPositions = [4, 0, 2, 6, 8]
+        if let preferredPosition = preferredPositions.first(where: { moves[$0] == nil }) {
+            let computerMove = Move(player: .computer, boarderIndex: preferredPosition)
+            moves[preferredPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
+        // Если ничего из вышеперечисленного не сработало, делаем случайный ход
+        let randomPosition = computerMovePosition(moves: moves)
+        let computerMove = Move(player: .computer, boarderIndex: randomPosition)
+        moves[randomPosition] = computerMove
+        completeTurn(for: computerMove)
     }
 }
