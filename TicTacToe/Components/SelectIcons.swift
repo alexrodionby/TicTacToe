@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SelectIcons: View {
     @State private var selectedIconSet: Int? = 0
+    @State private var gameModel = GameViewModel ()
     
     let iconSets = [
         ["xSkin4", "oSkin4"],
@@ -44,7 +45,8 @@ struct SelectIcons: View {
                             
                             Button(action: {
                                 selectedIconSet = index
-                                
+                                gameModel.xMark = iconSets [index] [0]
+                                gameModel.oMark = iconSets [index] [1]
                             }) {
                                 Text(selectedIconSet == index ? "Picked" : "Choose")
                                     .padding(.vertical,10)
