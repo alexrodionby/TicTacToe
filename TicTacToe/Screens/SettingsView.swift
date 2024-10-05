@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  TicTacToe
 //
-//  Created by Alexandr Rodionov on 29.09.24.
+//  Created by Alexandr Rodionov on 5.10.24.
 //
 
 import SwiftUI
@@ -16,48 +16,68 @@ struct SettingsView: View {
     /// Переменная для управления закрытием экрана
     @Environment(\.presentationMode) var presentationMode
     
-    @State var selectedIconSet: Int = 0
-    @State var isOnTime: Bool = false
-    @State var isOnMusic: Bool = false {
-            didSet {
-                gameVM.isMusicOn = isOnMusic // Обновляем статус музыки
-            }
-        }
+    var backgroundCornerRadius: CGFloat = 30
+    var toggleTimerText: String = "Game Time"
+    var toggleMusicText: String = "Music"
+    var toogleVstackSpacing: CGFloat = 20
     
-    let musicOptions = ["Classical", "Instrumentals", "Nature"]
-    let time = ["30 min", "60 min", "120 min","30 min", "60 min", "120 min"]
+    let iconSets = [
+        ["xSkin4", "oSkin4"],
+        ["xSkin5", "oSkin5"],
+        ["xSkin6", "oSkin6"],
+        ["xSkin3", "oSkin3"],
+        ["xSkin2", "oSkin2"],
+        ["xSkin1", "oSkin1"]
+    ]
     
     var body: some View {
-        ScrollView {
-            Text("Settings")
-                .font(.system(size: 24, weight: .bold, design: .default))
-                .padding()
+        ZStack(alignment: .center) {
+            Color.customBackground
+                .ignoresSafeArea()
             
-            VStack {
-                VStack(spacing: 25) {
-                    Toggle("Game Time", isOn: $isOnTime)
-                        .modifier(MainModifier())
-                    
-                    if isOnTime {
-                        CustomPicker(options: time, selected: GameViewModel().selectTimer)
+            @Bindable var gameVM = gameVM
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .center, spacing: 40) {
+                    VStack(alignment: .center, spacing: toogleVstackSpacing) {
+                        SettingsToggleView(toogleIsOn: $gameVM.gameWithTimer, toggleTextTitle: toggleTimerText)
+                        
+                        if gameVM.gameWithTimer == true {
+                            
+                        }
+                        
+                        SettingsToggleView(toogleIsOn: $gameVM.gameWithMusic, toggleTextTitle: toggleMusicText)
+                        
+                        if gameVM.gameWithMusic == true {
+                            
+                        }
+                    }
+                    .padding(toogleVstackSpacing)
+                    .background {
+                        RoundedRectangle(cornerRadius: backgroundCornerRadius, style: .continuous)
+                            .fill(.customWhite)
                     }
                     
-                    Toggle("Music", isOn: $isOnMusic)
-                        .modifier(MainModifier())
-                    
-                    
-                    if isOnMusic {
-                        CustomPicker(title: "Select Music", selected: GameViewModel().selectMusic)
+                    VStack(alignment: .center, spacing: 0) {
+                        LazyVGrid(columns: [GridItem(), GridItem()], spacing: 20) {
+                            ForEach(0..<6) { item in
+                                IconSetCell(
+                                    xMark: iconSets[item][0],
+                                    oMark: iconSets[item][1],
+                                    isPicked: gameVM.xMark == iconSets[item][0] && gameVM.oMark == iconSets[item][1] /// Проверка выбранных иконок
+                                ) {
+                                    /// Обновляем иконки в модели игры при выборе ячейки
+                                    gameVM.xMark = iconSets[item][0]
+                                    gameVM.oMark = iconSets[item][1]
+                                }
+                            }
+                        }
                     }
                 }
+                .padding(21)
             }
-            .padding()
-            .ignoresSafeArea()
-            .background(RoundedRectangle(cornerRadius: 30)
-                .fill(.customWhite))
-           
-            SelectIcons()
         }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -68,8 +88,6 @@ struct SettingsView: View {
                 .buttonStyle(.plain)
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .background(.customBackground)
     }
 }
 
