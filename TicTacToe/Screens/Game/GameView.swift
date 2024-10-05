@@ -158,6 +158,7 @@ struct GameView: View {
                     if gameVM.sfxOn {
                         gameVM.playSFX(name: "Win")
                     }
+                    gameVM.saveBestTime()
                     appRouter.appRoute.append(.result)
                 }
             case .inProgress:
