@@ -34,7 +34,7 @@ struct LeaderboardView: View {
                 } else {
                     ScrollView(showsIndicators: false) {
                         ForEach(Array(bestTimes.enumerated()), id: \.offset) { index, time in
-                            HStack(alignment: .top, spacing: 20) {
+                            HStack(alignment: .top, spacing: 10) {
                                 Circle()
                                     .fill(index == 0 ? Color.customPurple : Color.customLightBlue)
                                     .frame(width: 69, height: 69)
@@ -43,7 +43,7 @@ struct LeaderboardView: View {
                                             .font(.system(size: 20, weight: .regular, design: .default))
                                     }
 
-                                Text("Best time: \(formatTime(time))")
+                                Text(index == 0 ? "Best time: \(formatTime(time))" : "Time: \(formatTime(time))")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.vertical, 24)
                                     .padding(.horizontal, 24)
@@ -54,16 +54,16 @@ struct LeaderboardView: View {
                         }
 
                         // Кнопка для очистки `timeStorage`
-                        Button(action: {
-                            clearTimeStorage()
-                        }) {
-                            Text("Очистить историю")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.red.opacity(0.7))
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
+//                        Button(action: {
+//                            clearTimeStorage()
+//                        }) {
+//                            Text("Очистить историю")
+//                                .frame(maxWidth: .infinity)
+//                                .padding()
+//                                .background(Color.red.opacity(0.7))
+//                                .foregroundColor(.white)
+//                                .cornerRadius(8)
+//                        }
                     }
                     .padding(.horizontal, 21)
                     .padding(.top, 40)

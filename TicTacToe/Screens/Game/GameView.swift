@@ -154,6 +154,7 @@ struct GameView: View {
             case .finish:
                 Task {
                     try? await Task.sleep(for: .seconds(1))
+                    gameVM.saveBestTime()
                     appRouter.appRoute.append(.result)
                 }
             case .inProgress:

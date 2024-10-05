@@ -20,7 +20,7 @@ class TimeManager {
     ///   - playerTime: Время игрока, передается через замыкание, чтобы оно синхронизировалось с ViewModel
     ///   - onTimeUpdate: Замыкание для обновления времени во ViewModel
     func startPlayerTimer(playerTime: @escaping () -> Int, onTimeUpdate: @escaping (Int) -> Void) {
-      //  stopAnyTimer() // Останавливаем предыдущий таймер, если есть
+        stopAnyTimer() // Останавливаем предыдущий таймер, если есть
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             var timeLeft = playerTime()
