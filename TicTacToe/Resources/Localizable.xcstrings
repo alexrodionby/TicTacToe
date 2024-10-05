@@ -7,6 +7,9 @@
     "%lld" : {
 
     },
+    "%lld sec" : {
+
+    },
     "%lld мин" : {
 
     },
@@ -16,9 +19,6 @@
     "Best time: %@" : {
 
     },
-    "Choose" : {
-
-    },
     "Leaderboard" : {
 
     },
@@ -26,12 +26,6 @@
 
     },
     "No game history" : {
-
-    },
-    "Picked" : {
-
-    },
-    "pickedTime" : {
 
     },
     "Player One Time: %@" : {

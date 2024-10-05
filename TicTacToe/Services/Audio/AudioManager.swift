@@ -38,7 +38,7 @@ class AudioManager {
             print("Error: Could not play music: \(error.localizedDescription)")
         }
     }
-
+    
     // Метод для остановки музыки
     func stopMusic() {
         if audioPlayer?.isPlaying == true {
