@@ -19,6 +19,8 @@ struct SettingsToggleView: View {
         HStack(alignment: .center, spacing: 0) {
             Toggle(isOn: $toogleIsOn) {
                 Text(toggleTextTitle)
+                    .font(.system(size: 20, weight: .semibold, design: .default))
+                    .foregroundStyle(.customBlack)
             }
             .tint(.customBlue)
             .padding(.horizontal, 20)
@@ -28,7 +30,6 @@ struct SettingsToggleView: View {
             RoundedRectangle(cornerRadius: backgroundCornerRadius, style: .continuous)
                 .fill(.customLightBlue)
         }
-        
     }
 }
 

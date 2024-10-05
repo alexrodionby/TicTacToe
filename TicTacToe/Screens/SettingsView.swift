@@ -43,13 +43,13 @@ struct SettingsView: View {
                         SettingsToggleView(toogleIsOn: $gameVM.gameWithTimer, toggleTextTitle: toggleTimerText)
                         
                         if gameVM.gameWithTimer == true {
-                            
+                            SettingsPickerView(pickerTitle: "Duration")
                         }
                         
                         SettingsToggleView(toogleIsOn: $gameVM.gameWithMusic, toggleTextTitle: toggleMusicText)
                         
                         if gameVM.gameWithMusic == true {
-                            
+                            SettingsPickerView(pickerTitle: "Select Music")
                         }
                     }
                     .padding(toogleVstackSpacing)

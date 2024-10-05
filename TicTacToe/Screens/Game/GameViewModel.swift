@@ -46,6 +46,8 @@ class GameViewModel {
     
     /// Паттерны победы. Каждый набор представляет индексы ячеек, которые составляют выигрышную комбинацию.
     private let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
+    let timeVariants: [Int] = [10, 20, 30, 40, 50, 60]
+    let musicVariants: [String] = ["Classical", "Instrumentals", "Nature"]
     
     /// Переменные, отвечающие за текущих игроков и статус игры
     var firstTurnPlayer: Player = .playerOne
