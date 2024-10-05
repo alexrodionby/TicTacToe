@@ -42,6 +42,8 @@ struct Move {       /// Структура, которая описывает х
 @Observable
 class GameViewModel {
     
+    private let audioManager = AudioManager()
+    
     /// Паттерны победы. Каждый набор представляет индексы ячеек, которые составляют выигрышную комбинацию.
     private let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
     
@@ -50,7 +52,7 @@ class GameViewModel {
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
     var gameLevel: GameLevel = .randomGod
-    var selectedMusic: String = ""
+    var selectedMusic: String = "Classical"
     var selectedTime: Int = 60
     var gameWithTimer: Bool = false
     var gameWithMusic: Bool = false
@@ -61,11 +63,21 @@ class GameViewModel {
     var boardIsDisable: Bool = false        /// Блокирует доску
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
-    var isMusicOn: Bool = false {
-        didSet {
-            AudioManager().playMusic(named: selectMusic)
+    
+    
+    // MARK: - Music Methods (Методы для взаимодействия с Music)
+    
+    func startMusicIfEnabled() {
+            if gameWithMusic {
+                audioManager.playMusic(named: selectedMusic)
+            } else {
+                audioManager.stopMusic()
+            }
         }
-    }
+    
+    func stopMusic() {
+            audioManager.stopMusic()
+        }
     
     // MARK: - External Methods (Публичные методы для взаимодействия с View)
     
