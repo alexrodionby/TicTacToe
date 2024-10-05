@@ -39,6 +39,7 @@ struct Move {       /// Структура, которая описывает х
 }
 
 // MARK: - GameViewModel
+@MainActor
 @Observable
 class GameViewModel {
     
@@ -68,6 +69,41 @@ class GameViewModel {
     var boardIsDisable: Bool = false        /// Блокирует доску
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
+ 
+// MARK: - Сохранение результатов в UserDefaults
+    
+    /// Сохраняет наименьшее количество секунд, потраченное игроком, если время не истекло и оно больше нуля
+    func saveBestTime() {
+        // Проверяем, что время не истекло для обоих игроков
+        if playerOneTimeLeft > 0 || playerTwoTimeLeft > 0 {
+            // Определяем наименьшее время, потраченное одним из игроков
+            let minimumTimeSpent = min(playerOneTimeLeft, playerTwoTimeLeft)
+            
+            // Проверяем, что минимальное время больше нуля
+            if minimumTimeSpent > 0 {
+                // Загружаем текущий массив лучших времен из UserDefaults
+                var bestTimes = UserDefaults.standard.array(forKey: "timeStorage") as? [Int] ?? []
+                
+                // Проверяем, есть ли уже такое время в массиве
+                if !bestTimes.contains(minimumTimeSpent) {
+                    // Добавляем новое значение
+                    bestTimes.append(minimumTimeSpent)
+                    
+                    // Сохраняем обновленный массив в UserDefaults
+                    UserDefaults.standard.set(bestTimes, forKey: "timeStorage")
+                    print("Лучшее время сохранено: \(minimumTimeSpent) сек")
+                } else {
+                    print("Время \(minimumTimeSpent) сек уже сохранено, дубликат не добавлен")
+                }
+            } else {
+                print("Минимальное время равно нулю, сохранение не выполнено")
+            }
+        } else {
+            print("Время истекло для обоих игроков, ничего не сохраняем")
+        }
+    }
+    
+    
     
 // MARK: - Timer Methods (Методы для работы с таймерами)
     
