@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    " " : {
+
+    },
     "%@ turn" : {
 
     },
@@ -10,31 +13,16 @@
     "%lld sec" : {
 
     },
-    "%lld мин" : {
-
-    },
-    "%lld сек" : {
-
-    },
     "Best time: %@" : {
 
     },
     "Leaderboard" : {
 
     },
-    "LeaderboardView" : {
-
-    },
     "No game history" : {
 
     },
-    "Player One Time: %@" : {
-
-    },
-    "Player Two Time: %@" : {
-
-    },
-    "Reset" : {
+    "Powered by DevRush" : {
 
     },
     "Time: %@" : {
@@ -42,34 +30,6 @@
     },
     "with turn on time" : {
 
-    },
-    "Выберите время для игроков:" : {
-
-    },
-    "Игра закончена" : {
-
-    },
-    "Игрок - 1 передал ход" : {
-
-    },
-    "Игрок - 2 передал ход" : {
-
-    },
-    "Минуты" : {
-
-    },
-    "Секунды" : {
-
-    },
-    "Ходит: %@, осталось времени: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Ходит: %1$@, осталось времени: %2$@"
-          }
-        }
-      }
     }
   },
   "version" : "1.0"

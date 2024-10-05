@@ -69,6 +69,7 @@ class GameViewModel {
     var boardIsDisable: Bool = false        /// Блокирует доску
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
+    var sfxOn: Bool = false
  
 // MARK: - Сохранение результатов в UserDefaults
     
@@ -137,6 +138,10 @@ class GameViewModel {
     
     // MARK: - Music Methods (Методы для взаимодействия с Music)
     
+    func playSFX(name: String) {
+        audioManager.playMusic(named: name)
+    }
+    
     func startMusicIfEnabled() {
             if gameWithMusic {
                 audioManager.playMusic(named: selectedMusic)
@@ -166,6 +171,13 @@ class GameViewModel {
         } else {
             /// Если ячейка свободна, записываем ход игрока
             moves[move.boarderIndex] = move
+            if sfxOn {
+                if currentPlayer == .playerOne {
+                    playSFX(name: "One")
+                } else {
+                    playSFX(name: "Two")
+                }
+            }
         }
         
         /// Проверка на победу после каждого хода
@@ -313,6 +325,10 @@ class GameViewModel {
         // Записываем ход компьютера на доску.
         moves[computerPosition] = computerMove
         
+        if sfxOn {
+            playSFX(name: "Two")
+        }
+        
         // Проверяем, выиграл ли компьютер после этого хода.
         if checkWinner(move: computerMove) {
             whoWin = computerMove.player // Устанавливаем компьютера победителем.
@@ -422,21 +438,25 @@ class GameViewModel {
         try? await Task.sleep(for: .seconds(1))
         
         // Проверка, является ли это первым ходом компьютера
-        let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
+       // let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
         
-        if computerMovesCount == 0 {
-            // Если это первый ход компьютера, выбираем случайную позицию
-            let randomPosition = computerMovePosition(moves: moves)
-            let computerMove = Move(player: .computer, boarderIndex: randomPosition)
-            moves[randomPosition] = computerMove
-            completeTurn(for: computerMove)
-            return
-        }
+//        if computerMovesCount == 0 {
+//            // Если это первый ход компьютера, выбираем случайную позицию
+//            let randomPosition = computerMovePosition(moves: moves)
+//            let computerMove = Move(player: .computer, boarderIndex: randomPosition)
+//            moves[randomPosition] = computerMove
+//            completeTurn(for: computerMove)
+//            return
+//        }
         
         // Ход компьютера с минимаксом
         let bestPosition = bestMoveForComputer()
         let computerMove = Move(player: .computer, boarderIndex: bestPosition)
         moves[bestPosition] = computerMove
+        
+        if sfxOn {
+            playSFX(name: "Two")
+        }
         
         if checkWinner(move: computerMove) {
             whoWin = computerMove.player
@@ -460,6 +480,10 @@ class GameViewModel {
         
         // Проверка, является ли это первым ходом компьютера
         let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
+        
+        if sfxOn {
+            playSFX(name: "Two")
+        }
         
         if computerMovesCount == 0 {
             // Если это первый ход компьютера, выбираем случайную позицию
@@ -544,6 +568,10 @@ class GameViewModel {
     
     func computerEasyMove() async {
         try? await Task.sleep(for: .seconds(1))
+        
+        if sfxOn {
+            playSFX(name: "Two")
+        }
         
         // Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
         if let winPosition = findWinningMove(for: .computer) {

@@ -113,7 +113,13 @@ struct LeaderboardView: View {
 }
 
 
-#Preview {
-    LeaderboardView()
+#Preview("LightEN") {
+    NavigationStack {
+        LeaderboardView()
+            .environment(\.locale, .init(identifier: "EN"))
+            .preferredColorScheme(.light)
+            .environment(GameViewModel())
+            .environment(AppRouter())
+    }
 }
 

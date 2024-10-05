@@ -19,7 +19,9 @@ struct SettingsView: View {
     var backgroundCornerRadius: CGFloat = 30
     var toggleTimerText: String = "Game Time"
     var toggleMusicText: String = "Music"
+    var toggleSFXText: String = "Sound FX"
     var toogleVstackSpacing: CGFloat = 20
+    var navigationTitleText: String = "Settings"
     
     let iconSets = [
         ["xSkin4", "oSkin4"],
@@ -51,6 +53,8 @@ struct SettingsView: View {
                         if gameVM.gameWithMusic == true {
                             SettingsPickerView(pickerTitle: "Select Music")
                         }
+                        
+                        SettingsToggleView(toogleIsOn: $gameVM.sfxOn, toggleTextTitle: toggleSFXText)
                     }
                     .padding(toogleVstackSpacing)
                     .background {
@@ -78,6 +82,8 @@ struct SettingsView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .navigationTitle(navigationTitleText)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
