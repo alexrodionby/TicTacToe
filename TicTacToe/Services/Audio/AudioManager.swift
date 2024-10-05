@@ -33,7 +33,7 @@ class AudioManager {
             // Инициализируем плеер с новым треком
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.play()
-            print("Playing \(trackName)")
+            //print("Playing \(trackName)")
         } catch {
             print("Error: Could not play music: \(error.localizedDescription)")
         }
@@ -43,7 +43,7 @@ class AudioManager {
     func stopMusic() {
         if audioPlayer?.isPlaying == true {
             audioPlayer?.stop()
-            print("Music stopped")
+            //print("Music stopped")
         }
     }
 }
