@@ -50,8 +50,10 @@ class GameViewModel {
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
     var gameLevel: GameLevel = .randomGod
-    var selectMusic: String = "Instrumentals"
-    var selectTimer: String = "30 min"
+    var selectedMusic: String = ""
+    var selectedTime: Int = 60
+    var gameWithTimer: Bool = false
+    var gameWithMusic: Bool = false
     var xMark: String = "xSkin4"
     var oMark: String = "oSkin4"
     var whoWin: Player = .draw              /// Определяет победителя
