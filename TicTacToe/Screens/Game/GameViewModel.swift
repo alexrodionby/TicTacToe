@@ -385,6 +385,18 @@ class GameViewModel {
     func computerHardMove() async {
         try? await Task.sleep(for: .seconds(1))
         
+        // Проверка, является ли это первым ходом компьютера
+        let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
+        
+        if computerMovesCount == 0 {
+            // Если это первый ход компьютера, выбираем случайную позицию
+            let randomPosition = computerMovePosition(moves: moves)
+            let computerMove = Move(player: .computer, boarderIndex: randomPosition)
+            moves[randomPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
+        
         // Ход компьютера с минимаксом
         let bestPosition = bestMoveForComputer()
         let computerMove = Move(player: .computer, boarderIndex: bestPosition)
@@ -409,6 +421,18 @@ class GameViewModel {
     
     func computerMediumMove() async {
         try? await Task.sleep(for: .seconds(1))
+        
+        // Проверка, является ли это первым ходом компьютера
+        let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
+        
+        if computerMovesCount == 0 {
+            // Если это первый ход компьютера, выбираем случайную позицию
+            let randomPosition = computerMovePosition(moves: moves)
+            let computerMove = Move(player: .computer, boarderIndex: randomPosition)
+            moves[randomPosition] = computerMove
+            completeTurn(for: computerMove)
+            return
+        }
         
         // 1. Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
         if let winPosition = findWinningMove(for: .computer) {
