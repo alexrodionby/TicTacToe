@@ -185,11 +185,15 @@ struct GameView: View {
                 }
             }
         }
+        .onAppear {
+            gameVM.startMusicIfEnabled()
+        }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     presentationMode.wrappedValue.dismiss()
+                    gameVM.stopMusic()
                 } label: {
                     NavigationBackButton()
                 }

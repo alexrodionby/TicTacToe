@@ -93,6 +93,7 @@ struct ResultView: View {
                     
                     MainButton(buttonText: backButtonText, buttonColor: .customBlue, buttonBackColor: .customBackground, borderIsOn: true, buttonBorderColor: .customBlue) {
                         gameVM.resetGame()
+                        gameVM.stopMusic()
                         /// Ищем первое появление экрана выбора игры и переходим на него
                         if let firstIndex = appRouter.appRoute.firstIndex(where: { $0 == .selectgame }) {
                             /// Обрезаем массив до первого появления экрана SelectGame
