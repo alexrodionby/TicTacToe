@@ -54,7 +54,7 @@ struct GameView: View {
                     
                     Spacer()
                     
-                    Text("Timer")
+                    Text(gameVM.currentPlayer == gameVM.firstTurnPlayer ? "\(gameVM.playerOneTimeLeft)" : "\(gameVM.playerTwoTimeLeft)")
                     
                     Spacer()
                     
@@ -167,8 +167,6 @@ struct GameView: View {
         .onChange(of: gameVM.currentPlayer) { oldValue, newValue in
             if oldValue == Player.playerOne && newValue == Player.computer {
                 Task {
-                    print("gameVM.gameLevel =", gameVM.gameLevel)
-                    print("gameVM.currentPlayer =", gameVM.currentPlayer)
                     if gameVM.moves.contains(where: {$0 == nil}) {
                         switch gameVM.gameLevel {
                         case .easy:
@@ -180,13 +178,13 @@ struct GameView: View {
                         case .randomGod:
                             await gameVM.computerRandomMove()
                         }
-                        
                     }
                 }
             }
         }
         .onAppear {
             gameVM.startMusicIfEnabled()
+            gameVM.startGame()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {

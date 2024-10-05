@@ -42,7 +42,8 @@ struct Move {       /// Структура, которая описывает х
 @Observable
 class GameViewModel {
     
-    private let audioManager = AudioManager()
+    private let audioManager = AudioManager() // Наш менеджер аудио
+    private let timeManager = TimeManager() // Наш менеджер таймеров
     
     /// Паттерны победы. Каждый набор представляет индексы ячеек, которые составляют выигрышную комбинацию.
     private let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
@@ -50,6 +51,8 @@ class GameViewModel {
     let musicVariants: [String] = ["Classical", "Instrumentals", "Nature"]
     
     /// Переменные, отвечающие за текущих игроков и статус игры
+    var playerOneTimeLeft: Int = 60
+    var playerTwoTimeLeft: Int = 60
     var firstTurnPlayer: Player = .playerOne
     var secondTurnPlayer: Player = .computer
     var currentPlayer: Player = .playerOne
@@ -66,6 +69,35 @@ class GameViewModel {
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
     
+// MARK: - Timer Methods (Методы для работы с таймерами)
+    
+    /// Запуск таймера для текущего игрока
+    func startCurrentPlayerTimer() {
+        if currentPlayer == firstTurnPlayer {
+            timeManager.startPlayerTimer(playerTime: { self.playerOneTimeLeft }) { updatedTime in
+                self.playerOneTimeLeft = updatedTime
+                if self.playerOneTimeLeft == 0 {
+                    self.gameState = .finish
+                    self.whoWin = self.secondTurnPlayer
+                }
+            }
+        }
+        
+        if currentPlayer == secondTurnPlayer {
+            timeManager.startPlayerTimer(playerTime: { self.playerTwoTimeLeft }) { updatedTime in
+                self.playerTwoTimeLeft = updatedTime
+                if self.playerTwoTimeLeft == 0 {
+                    self.gameState = .finish
+                    self.whoWin = self.firstTurnPlayer
+                }
+            }
+        }
+    }
+    
+    /// Остановка всех таймеров
+    func stopAllTimers() {
+        timeManager.stopAnyTimer()
+    }
     
     // MARK: - Music Methods (Методы для взаимодействия с Music)
     
@@ -82,6 +114,12 @@ class GameViewModel {
         }
     
     // MARK: - External Methods (Публичные методы для взаимодействия с View)
+    
+    func startGame() {
+        playerOneTimeLeft = selectedTime
+        playerTwoTimeLeft = selectedTime
+        startCurrentPlayerTimer()
+    }
     
     /// Обрабатывает ход игрока, проверяет на занятость ячейки, обновляет текущего игрока и проверяет победу/ничью.
     func processingPlayerMove(move: Move) {
@@ -122,6 +160,8 @@ class GameViewModel {
         currentPlayer = firstTurnPlayer
         boardIsDisable = false
         winningPattern = nil  /// Сбрасываем выигрышный паттерн
+        playerOneTimeLeft = selectedTime
+        playerTwoTimeLeft = selectedTime
     }
     
     /// Возвращает имя игрока
@@ -167,12 +207,30 @@ class GameViewModel {
     /// Переключение между игроками
     private func changePlayer() {
         if gameState != .finish && moves.filter({ $0 == nil }).count != 0 {
-            if currentPlayer == firstTurnPlayer {
-                currentPlayer = secondTurnPlayer
-            } else {
-                currentPlayer = firstTurnPlayer
+            
+            if secondTurnPlayer == .playerTwo {
+                stopAllTimers()
+                
+                if currentPlayer == firstTurnPlayer {
+                    currentPlayer = secondTurnPlayer
+                } else {
+                    currentPlayer = firstTurnPlayer
+                }
+                
+                startCurrentPlayerTimer()
             }
             
+            if secondTurnPlayer == .computer {
+                
+                if currentPlayer == firstTurnPlayer {
+                    stopAllTimers()
+                    currentPlayer = secondTurnPlayer
+                } else {
+                    currentPlayer = firstTurnPlayer
+                    startCurrentPlayerTimer()
+                }
+            }
+
             if currentPlayer == .computer {
                 boardIsDisable = true
             } else {
