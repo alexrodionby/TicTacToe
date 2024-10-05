@@ -18,7 +18,11 @@ struct SettingsView: View {
     
     @State var selectedIconSet: Int = 0
     @State var isOnTime: Bool = false
-    @State var isOnMusic: Bool = false
+    @State var isOnMusic: Bool = false {
+            didSet {
+                gameVM.isMusicOn = isOnMusic // Обновляем статус музыки
+            }
+        }
     
     let musicOptions = ["Classical", "Instrumentals", "Nature"]
     let time = ["30 min", "60 min", "120 min","30 min", "60 min", "120 min"]

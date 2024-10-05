@@ -59,6 +59,11 @@ class GameViewModel {
     var boardIsDisable: Bool = false        /// Блокирует доску
     var moves: [Move?] = .init(repeating: nil, count: 9)    /// Массив, который хранит все ходы игры
     var winningPattern: Set<Int>?           /// Хранит индексы выигрышного паттерна
+    var isMusicOn: Bool = false {
+        didSet {
+            AudioManager().playMusic(named: selectMusic)
+        }
+    }
     
     // MARK: - External Methods (Публичные методы для взаимодействия с View)
     
