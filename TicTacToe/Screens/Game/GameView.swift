@@ -54,7 +54,11 @@ struct GameView: View {
                     
                     Spacer()
                     
-                    Text(gameVM.currentPlayer == gameVM.firstTurnPlayer ? "\(gameVM.playerOneTimeLeft)" : "\(gameVM.playerTwoTimeLeft)")
+                    if gameVM.gameWithTimer {
+                        Text(gameVM.currentPlayer == gameVM.firstTurnPlayer ? "\(gameVM.playerOneTimeLeft)" : "\(gameVM.playerTwoTimeLeft)")
+                    } else {
+                        Text(" ")
+                    }
                     
                     Spacer()
                     
@@ -140,12 +144,9 @@ struct GameView: View {
                 
                 VStack {
                     Spacer()
-                    Button {
-                        gameVM.resetGame()
-                    } label: {
-                        Text("Reset")
-                            .padding()
-                    }
+                    Text("Powered by DevRush")
+                        .font(.system(size: 16, weight: .regular, design: .default))
+                        .foregroundStyle(.customBlue)
                 }
             }
         }
@@ -154,7 +155,9 @@ struct GameView: View {
             case .finish:
                 Task {
                     try? await Task.sleep(for: .seconds(1))
-                    gameVM.saveBestTime()
+                    if gameVM.sfxOn {
+                        gameVM.playSFX(name: "Win")
+                    }
                     appRouter.appRoute.append(.result)
                 }
             case .inProgress:
