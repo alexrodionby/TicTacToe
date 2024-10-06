@@ -8,13 +8,16 @@
 import AVFoundation
 
 class AudioManager {
-    private var audioPlayer: AVAudioPlayer?
+    private var musicPlayer: AVAudioPlayer?
+    private var sfxPlayer: AVAudioPlayer?
     private var currentTrack: String?
     
-    // Метод для воспроизведения музыки
+    // MARK: - Music Methods
+    
+    // Метод для воспроизведения фоновой музыки
     func playMusic(named trackName: String) {
         // Проверяем, если трек уже играет, не перезапускаем его
-        if currentTrack == trackName && audioPlayer?.isPlaying == true {
+        if currentTrack == trackName && musicPlayer?.isPlaying == true {
             return
         }
         
@@ -30,9 +33,10 @@ class AudioManager {
         let url = URL(fileURLWithPath: path)
         
         do {
-            // Инициализируем плеер с новым треком
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
+            // Инициализируем плеер музыки с новым треком
+            musicPlayer = try AVAudioPlayer(contentsOf: url)
+            musicPlayer?.numberOfLoops = -1  // Зацикливаем бесконечно
+            musicPlayer?.play()
             //print("Playing \(trackName)")
         } catch {
             print("Error: Could not play music: \(error.localizedDescription)")
@@ -41,9 +45,31 @@ class AudioManager {
     
     // Метод для остановки музыки
     func stopMusic() {
-        if audioPlayer?.isPlaying == true {
-            audioPlayer?.stop()
+        if musicPlayer?.isPlaying == true {
+            musicPlayer?.stop()
             //print("Music stopped")
+        }
+    }
+    
+    // MARK: - Sound Effects Methods
+    
+    // Метод для воспроизведения звуковых эффектов
+    func playSoundEffect(name: String) {
+        // Находим путь к файлу звукового эффекта
+        guard let path = Bundle.main.path(forResource: name, ofType: "mp3") else {
+            print("Error: Sound effect file not found.")
+            return
+        }
+        
+        let url = URL(fileURLWithPath: path)
+        
+        do {
+            // Инициализируем плеер звуковых эффектов
+            sfxPlayer = try AVAudioPlayer(contentsOf: url)
+            sfxPlayer?.play()
+            //print("Playing sound effect \(sfxName)")
+        } catch {
+            print("Error: Could not play sound effect: \(error.localizedDescription)")
         }
     }
 }

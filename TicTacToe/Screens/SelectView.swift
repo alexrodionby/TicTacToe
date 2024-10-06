@@ -19,11 +19,11 @@ struct SelectView: View {
     /// Настраиваемые параметры для текста, изображений и стиля
     var selectGameTitle: String = "Select Game"
     var singlePlayerImageName: String = "singlePlayer"
-    var singlePlayerText: String = "Single Player"
+    var singlePlayerText: LocalizedStringKey = LocalizedStringKey("Single Player")
     var twoPlayerImageName: String = "twoPlayers1"
-    var twoPlayerText: String = "Two Players"
+    var twoPlayerText: LocalizedStringKey = LocalizedStringKey("Two Players")
     var leaderboardImageName: String = "twoPlayers2"
-    var leaderboardText: String = "Leaderboard"
+    var leaderboardText: LocalizedStringKey = LocalizedStringKey("Leaderboard")
     var settingIconName: String = "settingIcon"
     var backgroundRectangleCornerRadius: CGFloat = 30
     var rectangleHeight: CGFloat = 340

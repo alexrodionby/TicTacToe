@@ -15,13 +15,17 @@ struct SettingsView: View {
     @Environment(AppRouter.self) private var appRouter
     /// Переменная для управления закрытием экрана
     @Environment(\.presentationMode) var presentationMode
+    /// Получаем доступ к менеджеру языков приложения
+    @Environment(LanguageManager.self) var languageManager
     
     var backgroundCornerRadius: CGFloat = 30
-    var toggleTimerText: String = "Game Time"
-    var toggleMusicText: String = "Music"
-    var toggleSFXText: String = "Sound FX"
+    var toggleTimerText: LocalizedStringKey = LocalizedStringKey("Game Time")
+    var toggleMusicText: LocalizedStringKey = LocalizedStringKey("Music")
+    var toggleSFXText: LocalizedStringKey = LocalizedStringKey("Sound FX")
     var toogleVstackSpacing: CGFloat = 20
-    var navigationTitleText: String = "Settings"
+    var navigationTitleText: LocalizedStringKey = LocalizedStringKey("Settings")
+    var languageToggleTextTitle: LocalizedStringKey = LocalizedStringKey("English / Russian")
+    @State var languageToggleState: Bool = false
     
     let iconSets = [
         ["xSkin4", "oSkin4"],
@@ -42,6 +46,8 @@ struct SettingsView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .center, spacing: 40) {
                     VStack(alignment: .center, spacing: toogleVstackSpacing) {
+                        SettingsToggleView(toogleIsOn: $languageToggleState, toggleTextTitle: languageToggleTextTitle)
+                        
                         SettingsToggleView(toogleIsOn: $gameVM.gameWithTimer, toggleTextTitle: toggleTimerText)
                         
                         if gameVM.gameWithTimer == true {
@@ -81,6 +87,20 @@ struct SettingsView: View {
                 .padding(21)
             }
         }
+        .onAppear {
+            if UserDefaults.standard.string(forKey: "selectedLanguage") == "en" {
+                languageToggleState = false
+            } else {
+                languageToggleState = true
+            }
+        }
+        .onChange(of: languageToggleState) { old, new in
+            if new {
+                languageManager.currentLanguage = "ru"
+            } else {
+                languageManager.currentLanguage = "en"
+            }
+        }
         .navigationBarBackButtonHidden(true)
         .navigationTitle(navigationTitleText)
         .navigationBarTitleDisplayMode(.inline)
@@ -104,5 +124,6 @@ struct SettingsView: View {
             .preferredColorScheme(.light)
             .environment(GameViewModel())
             .environment(AppRouter())
+            .environment(LanguageManager())
     }
 }

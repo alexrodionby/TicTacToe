@@ -138,8 +138,8 @@ class GameViewModel {
     
     // MARK: - Music Methods (Методы для взаимодействия с Music)
     
-    func playSFX(name: String) {
-        audioManager.playMusic(named: name)
+    func playSoundEffect(name: String) {
+        audioManager.playSoundEffect(name: name)
     }
     
     func startMusicIfEnabled() {
@@ -173,9 +173,9 @@ class GameViewModel {
             moves[move.boarderIndex] = move
             if sfxOn {
                 if currentPlayer == .playerOne {
-                    playSFX(name: "One")
+                    playSoundEffect(name: "One")
                 } else {
-                    playSFX(name: "Two")
+                    playSoundEffect(name: "Two")
                 }
             }
         }
@@ -326,7 +326,7 @@ class GameViewModel {
         moves[computerPosition] = computerMove
         
         if sfxOn {
-            playSFX(name: "Two")
+            playSoundEffect(name: "Two")
         }
         
         // Проверяем, выиграл ли компьютер после этого хода.
@@ -455,7 +455,7 @@ class GameViewModel {
         moves[bestPosition] = computerMove
         
         if sfxOn {
-            playSFX(name: "Two")
+            playSoundEffect(name: "Two")
         }
         
         if checkWinner(move: computerMove) {
@@ -482,7 +482,7 @@ class GameViewModel {
         let computerMovesCount = moves.compactMap { $0?.player == .computer ? $0 : nil }.count
         
         if sfxOn {
-            playSFX(name: "Two")
+            playSoundEffect(name: "Two")
         }
         
         if computerMovesCount == 0 {
@@ -570,7 +570,7 @@ class GameViewModel {
         try? await Task.sleep(for: .seconds(1))
         
         if sfxOn {
-            playSFX(name: "Two")
+            playSoundEffect(name: "Two")
         }
         
         // Если нет угрозы победы игрока, проверка на возможность победного хода компьютера
