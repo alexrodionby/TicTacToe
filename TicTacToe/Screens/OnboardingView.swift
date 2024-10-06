@@ -15,7 +15,7 @@ struct OnboardingView: View {
     /// Названия изображений и текстов, которые можно изменить для кастомизации
     var logoImageName: String = "xo"
     var logoName: String = "TIC-TAC-TOE"
-    var buttonName: String = "Let's play"
+    var buttonName: LocalizedStringKey = LocalizedStringKey("Let's play")
     var rulesImageName: String = "questionMark"
     var settingsImageName: String = "settingIcon"
     
@@ -109,6 +109,13 @@ struct OnboardingView: View {
 #Preview("LightEN") {
     OnboardingView()
         .environment(\.locale, .init(identifier: "EN"))
+        .preferredColorScheme(.light)
+        .environment(AppRouter())
+        .environment(GameViewModel())
+}
+#Preview("LightEN") {
+    OnboardingView()
+        .environment(\.locale, .init(identifier: "RU"))
         .preferredColorScheme(.light)
         .environment(AppRouter())
         .environment(GameViewModel())

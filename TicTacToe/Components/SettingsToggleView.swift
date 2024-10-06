@@ -12,7 +12,7 @@ struct SettingsToggleView: View {
     @Binding var toogleIsOn: Bool
     
     var backgroundCornerRadius: CGFloat = 30
-    var toggleTextTitle: String = "Game Time"
+    var toggleTextTitle: LocalizedStringKey = LocalizedStringKey("Game Time")
     var toggleViewHeight: CGFloat = 70
     
     var body: some View { 

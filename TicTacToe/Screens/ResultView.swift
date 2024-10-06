@@ -16,20 +16,20 @@ struct ResultView: View {
     @Environment(\.presentationMode) var presentationMode
     
     /// Переменные для кастомизации текста и изображений в зависимости от результата игры
-    var playerLoseText: String = "You Lose!"
+    var playerLoseText: LocalizedStringKey = LocalizedStringKey("You Lose!")
     var playerLoseImage: String = "loseIcon"
-    var playerOneWinText: String = "Player One Win!"
+    var playerOneWinText: LocalizedStringKey = LocalizedStringKey("Player One Win!")
     var playerOneWinImage: String = "winIcon"
-    var playerTwoWinText: String = "Player Two Win!"
+    var playerTwoWinText: LocalizedStringKey = LocalizedStringKey("Player Two Win!")
     var playerTwoWinImage: String = "winIcon"
-    var drawText: String = "Draw!"
+    var drawText: LocalizedStringKey = LocalizedStringKey("Draw!")
     var drawImage: String = "drawIcon"
     
     /// Настройки внешнего вида
     var imagePadding: CGFloat = 81
     var centralSpacing: CGFloat = 20
-    var playAgainButtonText: String = "Play again"
-    var backButtonText: String = "Back"
+    var playAgainButtonText: LocalizedStringKey = LocalizedStringKey("Play again")
+    var backButtonText: LocalizedStringKey = LocalizedStringKey("Back")
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -111,6 +111,14 @@ struct ResultView: View {
 #Preview {
     ResultView()
         .environment(\.locale, .init(identifier: "EN"))
+        .preferredColorScheme(.light)
+        .environment(GameViewModel())
+        .environment(AppRouter())
+}
+
+#Preview {
+    ResultView()
+        .environment(\.locale, .init(identifier: "RU"))
         .preferredColorScheme(.light)
         .environment(GameViewModel())
         .environment(AppRouter())

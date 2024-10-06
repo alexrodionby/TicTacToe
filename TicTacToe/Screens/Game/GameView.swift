@@ -40,7 +40,7 @@ struct GameView: View {
                             .aspectRatio(1, contentMode: .fit)
                             .frame(height: nameTitleIconHeight, alignment: .center)
                         
-                        Text(gameVM.getPlayerName(player: gameVM.firstTurnPlayer))
+                        Text(LocalizedStringKey(gameVM.getPlayerName(player: gameVM.firstTurnPlayer)))
                             .font(.system(size: 16, weight: .semibold, design: .default))
                             .foregroundStyle(.customBlack)
                             .padding(.top, 10)
@@ -56,6 +56,8 @@ struct GameView: View {
                     
                     if gameVM.gameWithTimer {
                         Text(gameVM.currentPlayer == gameVM.firstTurnPlayer ? "\(gameVM.playerOneTimeLeft)" : "\(gameVM.playerTwoTimeLeft)")
+                            .font(.system(size: 20, weight: .bold, design: .default))
+                            .foregroundStyle(.customBlack)
                     } else {
                         Text(" ")
                     }
@@ -68,7 +70,7 @@ struct GameView: View {
                             .aspectRatio(1, contentMode: .fit)
                             .frame(height: nameTitleIconHeight, alignment: .center)
                         
-                        Text(gameVM.getPlayerName(player: gameVM.secondTurnPlayer))
+                        Text(LocalizedStringKey(gameVM.getPlayerName(player: gameVM.secondTurnPlayer)))
                             .font(.system(size: 16, weight: .semibold, design: .default))
                             .foregroundStyle(.customBlack)
                             .padding(.top, 10)
@@ -88,7 +90,7 @@ struct GameView: View {
                         .aspectRatio(1, contentMode: .fit)
                         .frame(height: nameTitleIconHeight, alignment: .center)
                     
-                    Text("\(gameVM.getPlayerName(player: gameVM.currentPlayer)) turn")
+                    Text(LocalizedStringKey("\(gameVM.getPlayerName(player: gameVM.currentPlayer)) turn"))
                         .font(.system(size: 20, weight: .bold, design: .default))
                 }
                 .padding(.top, 30)
@@ -156,7 +158,7 @@ struct GameView: View {
                 Task {
                     try? await Task.sleep(for: .seconds(1))
                     if gameVM.sfxOn {
-                        gameVM.playSFX(name: "Win")
+                        gameVM.playSoundEffect(name: "Win")
                     }
                     gameVM.saveBestTime()
                     appRouter.appRoute.append(.result)

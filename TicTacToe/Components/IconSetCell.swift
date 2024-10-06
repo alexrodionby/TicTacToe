@@ -15,8 +15,8 @@ struct IconSetCell: View {
     var markStackWidth: CGFloat = 110
     var titleTextHeight: CGFloat = 40
     var markTextRectangleCornerRadius: CGFloat = 30
-    var defaultTitleText: String = "Choose"
-    var pickedTitleText: String = "Picked"
+    var defaultTitleText: LocalizedStringKey = LocalizedStringKey("Choose")
+    var pickedTitleText: LocalizedStringKey = LocalizedStringKey("Picked")
     var isPicked: Bool = false
     var onTapAction: (() -> Void)?
     

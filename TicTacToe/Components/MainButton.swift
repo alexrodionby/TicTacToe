@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainButton: View {
     
-    var buttonText: String = "Button"
+    var buttonText: LocalizedStringKey = LocalizedStringKey("Button")
     var buttonFontSize: CGFloat = 20
     var buttonFontWeight: Font.Weight = .semibold
     var buttonColor: Color = .customWhite
